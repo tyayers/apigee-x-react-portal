@@ -1,0 +1,19 @@
+{
+  "apiproducts": [
+    {
+      "name": "Math API",
+      "description": "This API is for testing your math skills.",
+      "image": "https://storage.googleapis.com/cloud-icons/data%2004.png"
+    },
+    {
+      "name": "Maps API",
+      "description": "Geolocation service for all location queries.",
+      "image": "https://storage.googleapis.com/cloud-icons/data%2004.png"
+    },
+    {
+      "name": "Weather API",
+      "description": "Access historical weather data from any epoch.",
+      "image": "https://storage.googleapis.com/cloud-icons/data%2004.png"
+    }
+  ]
+}
