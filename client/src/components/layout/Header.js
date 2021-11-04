@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import Logo from './partials/Logo';
-import firebase from 'firebase/app'
+import ProfileHeader from '../elements/ProfileHeader'
 
 const propTypes = {
   navPosition: PropTypes.string,
@@ -53,9 +53,9 @@ const Header = ({
     setIsactive(true);
   }
 
-  const signOut = () => {
-    firebase.auth().signOut();
-  }
+  // const signOut = () => {
+  //   firebase.auth().signOut();
+  // }
 
   const closeMenu = () => {
     document.body.classList.remove('off-nav-is-active');
@@ -119,7 +119,7 @@ const Header = ({
                     <li>
                       <Link to="/apis" onClick={closeMenu}>APIs</Link>
                     </li>
-                    {firebase.auth().currentUser &&
+                    {props.user &&
                       <li>
                         <Link to="/apps" onClick={closeMenu}>Apps</Link>
                       </li>
@@ -131,7 +131,7 @@ const Header = ({
                       <Link to="#0" onClick={closeMenu}>Documentation</Link>
                     </li>
                   </ul>
-                  {!hideSignin && !firebase.auth().currentUser &&
+                  {props.state == "signed-out" &&
                     <ul
                       className="list-reset header-nav-right"
                     >
@@ -140,12 +140,13 @@ const Header = ({
                       </li>
                     </ul>
                   }
-                  {!hideSignin && firebase.auth().currentUser &&
+                  {props.state == "signed-in" && props.user &&
                     <ul
                       className="list-reset header-nav-right"
                     >
                       <li>
-                        <Link to="/" className="button button-primary button-wide-mobile button-sm" onClick={signOut}>Sign out</Link>
+                        <ProfileHeader user={props.user} signOut={props.signOut} />
+                        {/* <Link to="/" className="button button-primary button-wide-mobile button-sm" onClick={() => props.signOut()}>Sign out</Link> */}
                       </li>
                     </ul>
                   }                  

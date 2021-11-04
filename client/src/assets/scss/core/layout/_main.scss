@@ -31,3 +31,19 @@
 .site-content {
     flex: 1 0 auto;
 }
+
+body {
+  overflow-y: scroll;
+}
+
+:root {
+  --toastify-color-success: #5658DD;
+}
+
+.appRowButton {
+  background-color: #25282c;
+}
+
+.appRowButton:hover {
+  background-color: #2e3136;
+}

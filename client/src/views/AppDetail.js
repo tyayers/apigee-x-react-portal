@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { getApiProducts, updateApp } from '../utils/DataService.mjs';
+import { useHistory } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { getApiProducts, updateApp, updateAppCredential } from '../utils/DataService.mjs';
 // import sections
 import Hero from '../components/sections/Hero';
 import FeaturesTiles from '../components/sections/FeaturesTiles';
@@ -8,11 +12,24 @@ import Testimonial from '../components/sections/Testimonial';
 import Cta from '../components/sections/Cta';
 import { map } from 'lodash';
 import { getApp } from '../utils/DataService.mjs';
+import copyIcon from '../assets/images/copy_icon.png'
+import showIcon from '../assets/images/show_icon.png'
+import hideIcon from '../assets/images/hide_icon.png'
+
+import Switch from "react-switch";
 
 const AppDetail = (props) => {
-  const [apis, setApis] = useState([]);
+  const history = useHistory();
+
+  // const [apis, setApis] = useState([]);
   const [appName, setAppName] = useState(props.match.params.app == undefined ? "" : props.match.params.app);  
   const [isNewApp, setIsNewApp] = useState(appName == undefined ? true : false);
+  const [appDataLoaded, setAppDataLoaded] = useState(false);
+
+  const [keyInputType, setKeyInputType] = useState("password");
+  const [keyInputIcon, setKeyInputIcon] = useState(showIcon);
+  const [secretInputType, setSecretInputType] = useState("password");
+  const [secretInputIcon, setSecretInputIcon] = useState(showIcon);
 
   const [apiStatus, setApiStatus] = useState({});
 
@@ -22,22 +39,71 @@ const AppDetail = (props) => {
   });
 
   useEffect(() => {
-    if (props.user) {
-      getApiProducts().then((result) => {
-        setApis(result.apiproducts);
-      }).catch((error) => {
-        console.error(error);
-      });
-
-      if (!isNewApp) {
-        getApp(props.user.email, appName).then((result) => {
+    if (!appDataLoaded && props.apps && props.apps.length > 0) {
+      setAppDataLoaded(true);
+      props.apps.forEach((result) => {
+        if (result.name === appName) {
+          var newStatus = JSON.parse(JSON.stringify(apiStatus));
+    
+          for(const credential in result.credentials) {
+            for (const apiProduct in result.credentials[credential].apiProducts) {
+              if (result.credentials[credential].apiProducts[apiProduct].status === "approved")
+                newStatus[result.credentials[credential].apiProducts[apiProduct].apiproduct] = true;
+              else
+                newStatus[result.credentials[credential].apiProducts[apiProduct].apiproduct] = false;
+            }
+          }
+    
+          setApiStatus(newStatus);
           setApp(result);
-        }).catch((error) => {
-          console.error(error);
-        });
-      }   
+        }
+      });
     }
-  }, [props.user]);
+  });
+
+  function copyTextToClipboard(text) {
+    var textArea = document.createElement("textarea");
+  
+    // Place in the top-left corner of screen regardless of scroll position.
+    textArea.style.position = 'fixed';
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+  
+    // Ensure it has a small width and height. Setting to 1px / 1em
+    // doesn't work as this gives a negative w/h on some browsers.
+    textArea.style.width = '2em';
+    textArea.style.height = '2em';
+  
+    // We don't need padding, reducing the size if it does flash render.
+    textArea.style.padding = 0;
+  
+    // Clean up any borders.
+    textArea.style.border = 'none';
+    textArea.style.outline = 'none';
+    textArea.style.boxShadow = 'none';
+  
+    // Avoid flash of the white box if rendered for any reason.
+    textArea.style.background = 'transparent';
+  
+  
+    textArea.value = text;
+  
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+  
+    try {
+      var successful = document.execCommand('copy');
+      var msg = successful ? 'successful' : 'unsuccessful';
+      console.log('Copying text command was ' + msg);
+    } catch (err) {
+      console.log('Oops, unable to copy');
+    }
+  
+    document.body.removeChild(textArea);
+
+    toast.success("Copied!");
+  }
 
   function appNameChange(event) {
     var newapp = JSON.parse(JSON.stringify(app));
@@ -51,26 +117,59 @@ const AppDetail = (props) => {
     setApp(newapp);
   }
 
-  function clickProduct(name) {
+  function clickProduct(name, value) {
     var newStatus = JSON.parse(JSON.stringify(apiStatus));
-    if (newStatus[name])
-      newStatus[name] = false;
-    else
-      newStatus[name] = true;
 
-    setApiStatus(newStatus);
+    if (newStatus[name] != value) {
+      newStatus[name] = value;
+      setApiStatus(newStatus);
+    }
   }
 
+  function toggleKeyType() {
+    if (keyInputType === "password") {
+      setKeyInputType("text");
+      setKeyInputIcon(hideIcon);
+    }
+    else {
+      setKeyInputType("password");
+      setKeyInputIcon(showIcon);
+    }
+  }
+
+  function toggleSecretType() {
+    if (secretInputType === "password") {
+      setSecretInputType("text");
+      setSecretInputIcon(hideIcon);
+    }
+    else {
+      setSecretInputType("password");
+      setSecretInputIcon(showIcon);
+    }
+  }  
+
   function saveApp() {
-    app.apiProducts = [];
+
+    app.credentials[0].apiProducts = [];
 
     for (const [key, value] of Object.entries(apiStatus)) {
-      if (value)
-        app.apiProducts.push(key);
+      if (value) {
+        app.credentials[0].apiProducts.push({
+          apiproduct: key,
+          status: "approved"
+        });
+      }
     }
     
     if(!isNewApp) {
-      var response = updateApp(props.user.email, app.name, app);
+      updateAppCredential(props.user.email, app.name, app.credentials[0]).then((credentialResult) => {
+        
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+      history.push('/apps');
     }
   }
 
@@ -110,15 +209,25 @@ const AppDetail = (props) => {
                       {app.credentials.map((credential) =>
                         <div>
                           <div class="form-input-container form-ic1">
-                            <input id="appname" class="form-input" type="text" placeholder=" " value={credential.consumerKey}></input>
+                            <input id="appname" class="form-input" type={keyInputType} placeholder=" " value={credential.consumerKey} disabled></input>
                             <div class="form-cut"></div>
-                            <button style={{position: "absolute", right: "6px", top: "-10px", width: "auto", height: "26px", marginTop: "0px"}} class="form-submit">copy</button>
+                            <button onClick={() => copyTextToClipboard(credential.consumerKey)} style={{position: "absolute", right: "6px", top: "11px", width: "auto", height: "26px", marginTop: "0px", backgroundColor: "#33363A"}}  class="form-submit">
+                              <img src={copyIcon}></img>
+                            </button>
+                            <button onClick={() => toggleKeyType()} style={{position: "absolute", right: "40px", top: "11px", width: "auto", height: "26px", marginTop: "0px", backgroundColor: "#33363A"}} class="form-submit">
+                              <img src={keyInputIcon}></img>
+                            </button>                            
                             <label for="appname" class="form-placeholder">Key</label>
                           </div>
                           <div class="form-input-container form-ic1">
-                            <input id="appname" class="form-input" type="text" placeholder=" " value={credential.consumerSecret}></input>
+                            <input id="appname" class="form-input" type={secretInputType} placeholder=" " value={credential.consumerSecret} disabled></input>
                             <div class="form-cut"></div>
-                            <button style={{position: "absolute", right: "6px", top: "-10px", width: "auto", height: "26px", marginTop: "0px"}} class="form-submit">copy</button>
+                            <button onClick={() => copyTextToClipboard(credential.consumerSecret)} style={{position: "absolute", right: "6px", top: "11px", width: "auto", height: "26px", marginTop: "0px", backgroundColor: "#33363A"}}  class="form-submit">
+                              <img src={copyIcon}></img>
+                            </button>
+                            <button onClick={() => toggleSecretType()} style={{position: "absolute", right: "40px", top: "11px", width: "auto", height: "26px", marginTop: "0px", backgroundColor: "#33363A"}} class="form-submit">
+                              <img src={secretInputIcon}></img>
+                            </button>   
                             <label for="appname" class="form-placeholder">Secret</label>
                           </div>
                         </div>
@@ -128,21 +237,45 @@ const AppDetail = (props) => {
                   <br/>
                   <div class="form-title">APIs</div>
                   <br/>
-                  <table style={{textAlign: "left"}}>
+                  <table style={{textAlign: "left", tableLayout: "fixed"}}>
+                    <colgroup>
+                      <col span="1" style={{width: "25%"}} />
+                      <col span="1" style={{width: "75%"}} />
+                      <col span="1" style={{width: "20%"}} />
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Active</th>
+                            {/* <th>Actions</th> */}
                         </tr>
                     </thead>
                     <tbody>
-                      {apis.map((product) => 
+                      {props.apis.map((product, index) => 
                         <tr>
                             <td>{product.name}</td>
                             <td>{product.description}</td>
-                            {apiStatus[product.name]
+                            <td>
+                            <label htmlFor={"material-switch-" + index}>
+                              <Switch
+                                checked={apiStatus[product.name]}
+                                onChange={(e) => clickProduct(product.name, e)}
+                                onColor="#6163FF"
+                                onHandleColor="#5658DD"
+                                handleDiameter={30}
+                                uncheckedIcon={false}
+                                checkedIcon={false}
+                                boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                                activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                                height={20}
+                                width={48}
+                                className="react-switch"
+                                id={"material-switch-" + index}
+                              />
+                            </label>
+                            </td>
+                            {/* {apiStatus[product.name]
                             ? <td>Active</td>
                             : <td>Inactive</td>
                             }
@@ -150,7 +283,7 @@ const AppDetail = (props) => {
                             {apiStatus[product.name]
                             ? <td><button style={{height: "26px", width: "73px", marginTop: "0px"}} class="form-submit" onClick={() => clickProduct(product.name)}>Disable</button></td>
                             : <td><button style={{height: "26px", width: "73px", marginTop: "0px"}} class="form-submit" onClick={() => clickProduct(product.name)}>Enable</button></td>
-                            }
+                            } */}
                         </tr>
                       )}
                     </tbody>
@@ -167,6 +300,18 @@ const AppDetail = (props) => {
           </div>
           
         </div>
+        <ToastContainer
+          position="bottom-left"
+          autoClose={3000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </section>
     </>
   );

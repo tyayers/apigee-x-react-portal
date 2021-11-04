@@ -1,23 +1,28 @@
 import React from 'react';
+import apiIcon from '../assets/images/api_icon.svg';
 
 const ApiProduct = (props) => {
 
   return (
     <div className="tiles-item" data-reveal-delay="200">
-      <div className="tiles-item-inner">
-        {/* <img src="https://static.vecteezy.com/system/resources/previews/002/492/189/original/saas-software-as-a-service-line-icon-with-cloud-vector.jpg" alt="Avatar" style={{borderRadius: "50%", height: "150px", width: "150px"}} /> */}
-        <img src="/static/media/logo.2810a88b.svg" alt="Avatar" style={{borderRadius: "50%", height: "150px", width: "150px"}} />
-        <div className="apiproduct-item-content">
-          <p className="text-sm mb-0">
-            {props.description}
-              </p>
-        </div>
-        <div className="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider">
-          <span className="testimonial-item-name text-color-high">Docs</span>
-          <span className="text-color-low"> / </span>
-          <span className="testimonial-item-link">
-            <a href={"/apis/" + props.name}>{props.name}</a>
+      <div className="tiles-item-inner" style={{borderRadius: "12%"}}>
+
+      <div className="testimonial-item-footer text-xs mt-32 mb-0 has-bottom-divider">
+          {/* <span className="testimonial-item-name text-color-high">Docs</span> */}
+          {/* <span className="text-color-low"> / </span> */}
+          <span className="testimonial-item-link" style={{fontSize: "27px"}}>
+            {props.name}
           </span>
+        </div>
+
+        {props.image
+        ? <img src={props.image} alt="Avatar" style={{borderRadius: "50%", height: "150px", width: "150px"}} />
+        : <img src={apiIcon} alt="Avatar" style={{borderRadius: "50%", height: "150px", width: "150px"}} />
+        }
+        <div className="apiproduct-item-content">
+          <p className="text-sm mb-0" style={{height: "82px", overflow: "hidden", textOverflow: "ellipsis"}}>
+            {props.description}
+          </p>
         </div>
       </div>
     </div>

@@ -1,32 +1,48 @@
 {
   "apps": [
-      {
-          "appId": "4368d058-c2e2-475e-a903-af63fb3566ba",
-          "name": "new app",
-          "createdAt": "1632906109242",
-          "credentials": [
-              {
-                  "key": "iFQquZ7lIsfsT3GWmYeQLxOJypO6XtmGiniCxT9A6w",
-                  "secret": "hlGJDUzlxZOTA1OZfZqsbZ3N7FEqkp4e9hYqVP4vAZftenem4AtyAzB4xD",
-                  "issuedAt": "1632906109293",
-                  "expiresAt": "-1",
-                  "status": "approved"
-              }
-          ]
-      },
-      {
-          "appId": "79ea90a6-c2e8-4347-915d-88907d471176",
-          "name": "httpbin-app",
-          "createdAt": "1627037914048",
-          "credentials": [
-              {
-                  "key": "QFmcE1ZLDdr8XANqlfgkGAjhGyoxudzIASY9tOq",
-                  "secret": "l90IZJCavsGnSfGrrL5ffi2uGplOuQBcao30jOxtl8c2iogGioB0",
-                  "issuedAt": "1627037914160",
-                  "expiresAt": "-1",
-                  "status": "approved"
-              }
-          ]
-      }
+    {
+      "appId": "4368d058-c2e2-475e-a903-af63fb3566ba",
+      "name": "new app",
+      "createdAt": "1632906109242",
+      "credentials": [
+        {
+          "apiProducts": [
+            {
+              "apiproduct": "Math API",
+              "status": "approved"
+            },
+            {
+              "apiproduct": "Maps API",
+              "status": "approved"
+            }
+          ],
+          "consumerKey": "iFQquZ7lIsfsT3GWmYeQLxOJypO6XtmGiniCxT9A6w",
+          "consumerSecret": "hlGJDUzlxZOTA1OZfZqsbZ3N7FEqkp4e9hYqVP4vAZftenem4AtyAzB4xD",
+          "issuedAt": "1632906109293",
+          "expiresAt": "-1",
+          "status": "approved"
+        }
+      ]
+    },
+    {
+      "appId": "79ea90a6-c2e8-4347-915d-88907d471176",
+      "name": "httpbin-app",
+      "createdAt": "1627037914048",
+      "credentials": [
+        {
+          "apiProducts": [
+            {
+              "apiproduct": "Math API",
+              "status": "approved"
+            }
+          ],
+          "consumerKey": "QFmcE1ZLDdr8XANqlfgkGAjhGyoxudzIASY9tOq",
+          "consumerSecret": "l90IZJCavsGnSfGrrL5ffi2uGplOuQBcao30jOxtl8c2iogGioB0",
+          "issuedAt": "1627037914160",
+          "expiresAt": "-1",
+          "status": "approved"
+        }
+      ]
+    }
   ]
 }

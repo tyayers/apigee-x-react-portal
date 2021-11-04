@@ -9,19 +9,19 @@ import FeaturesSplit from '../components/sections/FeaturesSplit';
 import Testimonial from '../components/sections/Testimonial';
 import Cta from '../components/sections/Cta';
 
+import AppCard from '../components/elements/AppCard';
+
 const Apps = (props) => {
-  const [apps, setApps] = useState([]);
+  // const [apps, setApps] = useState([]);
   
-
-
-  useEffect(() => {
-    if (props.user) {
-      getApps(props.user.email).then((result) => {
-        setApps(result.apps);
-      });
-    }
-  }, [props.user]);
-
+  // useEffect(() => {
+  //   if (props.user) {
+  //     getApps(props.user.email).then((result) => {
+  //       setApps(result.apps);
+  //     }); 
+  //   }
+  // }, [props.user]);
+ 
   return (
     <>
       <section className="testimonial section center-content illustration-section-01">
@@ -36,28 +36,30 @@ const Apps = (props) => {
                 <div style={{display: "flex", alignContent: "space-between", justifyContent: "space-between"}}>
                   {/* <h3 class="mt-0 mb-16 reveal-from-bottom" style={{textAlign: "left"}} data-reveal-delay="200"><span class="text-color-primary">Apps</span></h3> */}
                   <span class="form-title">Apps</span>
-                  <Link to="/apps/new" style={{height: "30px", width: "60px", marginTop: "34px"}} className="form-submit">Add</Link>
+                  <Link to="/apps/new" style={{height: "30px", width: "93px", marginTop: "34px"}} className="form-submit">New App</Link>
                 </div>
                 <br/>
-                <table style={{textAlign: "left"}}>
+                {props.apps.map((app) => 
+                  <Link to={"/apps/" + app.name}><AppCard AppName={app.name} AppApis={app.credentials[0].apiProducts} CreatedDate={app.createdAt} /></Link>
+                )}
+                {/* <table style={{textAlign: "left"}}>
                   <thead>
                       <tr>
                           <th>Name</th>
                           <th>Description</th>
-                          <th>Created on</th>
+                          <th style={{textAlign: "right"}}>Created on</th>
                       </tr>
                   </thead>
                   <tbody>
-                    {/* <div class="lds-ripple"><div></div><div></div></div> */}
-                    {apps.map((app) =>
+                    {props.apps.map((app) =>
                       <tr>
-                          <td><a href={"/apps/" + app.name}>{app.name}</a></td>
-                          <td>{app.description}</td>
-                          <td>Sep 20, 2021</td>
+                          <td><Link to={"/apps/" + app.name}>{app.name}</Link></td>
+                          <td><Link to={"/apps/" + app.name}>{app.description}</Link></td>
+                          <td style={{textAlign: "right"}}><Link to={"/apps/" + app.name}>{(new Date(parseFloat(app.createdAt))).toDateString()}</Link></td>
                       </tr>
                     )}
                   </tbody>
-                </table>
+                </table> */}
               </div>
               <div class="tiles-wrap">
 

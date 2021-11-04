@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getApiProducts } from '../utils/DataService.mjs';
 
 // import sections
 import Hero from '../components/sections/Hero';
@@ -7,21 +6,33 @@ import FeaturesTiles from '../components/sections/FeaturesTiles';
 import FeaturesSplit from '../components/sections/FeaturesSplit';
 import Testimonial from '../components/sections/Testimonial';
 import Cta from '../components/sections/Cta';
+import { Link } from 'react-router-dom';
+
+import apiIcon from '../assets/images/api_icon.svg';
 
 import ApiProduct from '../components/ApiProduct';
 
-const Apis = () => {
-  const [apisLoaded, setApisLoaded] = useState(false);
-  const [apis, setApis] = useState([]);
+const Apis = (props) => {
+  // const [apisLoaded, setApisLoaded] = useState(false);
+  // const [apis, setApis] = useState([]);
 
-  useEffect(() => {
-    if (!apisLoaded) {
-      getApiProducts().then((result) => {
-        setApis(result.apiproducts);
-        setApisLoaded(true);
-      });
+  // useEffect(() => {
+  //   if (!apisLoaded) {
+  //     getApiProducts().then((result) => {
+  //       setApis(result.apiproducts);
+  //       setApisLoaded(true);
+  //     });
+  //   }
+  // }, apisLoaded);
+
+  const productList = props.apis.map((api) => {
+    if (api.access === "public") {
+      if (api.specUrl) 
+        return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
+      else
+        return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
     }
-  }, apisLoaded);
+  });
 
   return (
     <>
@@ -36,7 +47,7 @@ const Apis = () => {
                 </p>
               </div>
               <div class="tiles-wrap">
-                {apis.map((api) => <a href={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} /></a>)}
+                {productList}
               </div>
             </div>
 

@@ -1,8 +1,12 @@
 .testimonial {
 
 	.tiles-item-inner {
-		background: get-color(dark, 2);		
+		background: get-color(dark, 2);
 	}
+
+  .tiles-item-inner:hover {
+    background-color: #2e3136;
+  }
 }
 
 .testimonial-item-content {

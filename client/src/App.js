@@ -4,6 +4,8 @@ import AppRoute from './utils/AppRoute';
 import ScrollReveal from './utils/ScrollReveal';
 import ReactGA from 'react-ga';
 
+import { getApiProducts, getApps } from './utils/DataService.mjs';
+
 // Layouts
 import LayoutDefault from './layouts/LayoutDefault';
 
@@ -48,20 +50,34 @@ const trackPage = page => {
 
 const App = () => {
   const [user, setUser] = useState();
+  const [state, setState] = useState("startup");
+  const [apiProducts, setApiProducts] = useState([]);
+  const [apps, setApps] = useState([]);
+
   const history = useHistory();
   const childRef = useRef();
   let location = useLocation();
 
   useEffect(() => {
     if (!user) {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          setUser(user);
-          //history.push("/apis");
-        } else {
-          // User is signed out
+
+      getApiProducts().then((result) => {
+        setApiProducts(result.apiproducts);
+      });
+
+      firebase.auth().onAuthStateChanged((updatedUser) => {
+
+        setUser(updatedUser);
+
+        if (updatedUser) {
+          setState("signed-in");
+          getApps(updatedUser.email).then((result) => {
+            setApps(result.apps);
+          }); 
+        }
+        else {
+          setState("signed-out");
           history.push("/");
-          // ...
         }
       });
     }
@@ -75,18 +91,26 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
+  function signOut() {
+    firebase.auth().signOut();
+  }
+
+  function getAppState() {
+
+  }
+
   return (
     <ScrollReveal
       ref={childRef}
       children={() => (
         <Switch>
-          <AppRoute exact path="/" component={Home} layout={LayoutDefault} user={user}/>
-          <AppRoute exact path="/sign-in" component={SignIn} fb={app} ui={fbui} layout={LayoutDefault} />
-          <AppRoute exact path="/apps" component={Apps} layout={LayoutDefault} user={user}/>
-          <AppRoute exact path="/apps/new" component={AppDetail} layout={LayoutDefault} user={user}/>
-          <AppRoute exact path="/apps/:app" component={AppDetail} layout={LayoutDefault} user={user}/>
-          <AppRoute exact path="/apis" component={Apis} layout={LayoutDefault} user={user}/>
-          <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault}/>
+          <AppRoute exact path="/" component={Home} layout={LayoutDefault} user={user} signOut={signOut} state={state}/>
+          <AppRoute exact path="/sign-in" component={SignIn} fb={app} ui={fbui} layout={LayoutDefault}  state={state}/>
+          <AppRoute exact path="/apps" component={Apps} layout={LayoutDefault} user={user} apps={apps} signOut={signOut} state={state}/>
+          <AppRoute exact path="/apps/new" component={AppDetail} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
+          <AppRoute exact path="/apps/:app" component={AppDetail} layout={LayoutDefault} user={user} apis={apiProducts} apps={apps} signOut={signOut} state={state}/>
+          <AppRoute exact path="/apis" component={Apis} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
+          <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
         </Switch>
       )} />
   );

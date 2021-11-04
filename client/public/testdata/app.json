@@ -4,8 +4,18 @@
   "createdAt": "1632906109242",
   "credentials": [
       {
-          "key": "iFQquZ7lIsYYVxAfQLxOJypO6XtmGiniCxT9A6w",
-          "secret": "hlGJDUzlxZOTA1OZLfbZ3N7FEqkp4e9hYqVP4vAZftenem4AtyAzB4xD",
+          "apiProducts": [
+            {
+                "apiproduct": "Math API",
+                "status": "approved"
+            },
+            {
+              "apiproduct": "Maps API",
+              "status": "approved"
+            }
+          ],
+          "consumerKey": "iFQquZ7lIsYYVxAfQLxOJypO6XtmGiniCxT9A6w",
+          "consumerSecret": "hlGJDUzlxZOTA1OZLfbZ3N7FEqkp4e9hYqVP4vAZftenem4AtyAzB4xD",
           "issuedAt": "1632906109293",
           "expiresAt": "-1",
           "status": "approved"
