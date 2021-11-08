@@ -29,7 +29,7 @@ const Apis = (props) => {
     if (api.access === "public") {
       if (api.specUrl) 
         return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
-      else
+      else if (!props.hideEmptyApis)
         return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
     }
   });

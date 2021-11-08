@@ -10,7 +10,7 @@
     {
       "name": "Maps API",
       "description": "Geolocation service for all location queries.",
-      "access": "internal"
+      "access": "public"
     },
     {
       "name": "Weather API",

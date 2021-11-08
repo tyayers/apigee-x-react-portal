@@ -7,7 +7,7 @@ const ApiProduct = (props) => {
     <div className="tiles-item" data-reveal-delay="200">
       <div className="tiles-item-inner" style={{borderRadius: "12%"}}>
 
-      <div className="testimonial-item-footer text-xs mt-32 mb-0 has-bottom-divider">
+      <div className="testimonial-item-footer text-xs mt-4 mb-16">
           {/* <span className="testimonial-item-name text-color-high">Docs</span> */}
           {/* <span className="text-color-low"> / </span> */}
           <span className="testimonial-item-link" style={{fontSize: "27px"}}>
@@ -24,6 +24,7 @@ const ApiProduct = (props) => {
             {props.description}
           </p>
         </div>
+
       </div>
     </div>
   );  

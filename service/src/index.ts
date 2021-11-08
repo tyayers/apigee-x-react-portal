@@ -1,24 +1,77 @@
 import fs from 'fs'
 const path = require('path');
 import express from 'express';
+import cors from 'cors';
 import yaml from 'js-yaml'
+import admin from 'firebase-admin'
 
 import {ApigeeService, ApiManagementInterface, Developers} from 'apigee-x-module'
+import { applicationDefault } from 'firebase-admin/app';
 
 require('dotenv').config()
 
+admin.initializeApp({
+  credential: applicationDefault()
+});
+
 const config = yaml.load(fs.readFileSync('./config/apiportal.yaml', 'utf8'));
 const app = express();
-const apigeeService: ApiManagementInterface = new ApigeeService(process.env.SERVICE_ACCOUNT_EMAIL, process.env.SERVICE_ACCOUNT_KEY, process.env.APIGEE_ORG);
+const apigeeService: ApiManagementInterface = new ApigeeService(process.env.APIGEE_ORG);
 
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 app.use(express.static('public'));
 
+const publicMethods = [
+  "/apim/config",
+  "/apim/apiproducts"
+];
+
+// Middleware to validate token
+app.use(function (req, res, next) {
+  if (publicMethods.includes(req.url)) {
+    next();
+  }
+  else if (!req.headers.authorization) {
+    return res.status(403).json({ error: 'No credentials sent!' });
+  }
+  else {
+    var bearer = req.headers.authorization.replace(/^Bearer\s/, '');
+    // idToken comes from the client app
+    admin.auth().verifyIdToken(bearer).then(function (decodedToken) {
+        var uid = decodedToken.uid;
+        req.headers["email"] = decodedToken["email"];
+        next();
+        // ...
+    }).catch(function (error) {
+        console.log("token validation error! " + error);
+        return res.status(403).json({ error: 'Invalid authorization token sent!' });
+        // Handle error
+    });
+  }
+});
+
+app.get('/apim/config', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(config);
+});
+
 app.get('/apim/apiproducts', (req, res) => {
-  res.setHeader('Content-Type', 'application/json')
   apigeeService.getApiProducts().then((result) => {
     if (result) {
-      res.setHeader('Content-Type', 'application/json')
+
+      // // Set overrides if available
+      // for(const i in result.apiProducts) {
+      //   const apiProduct = result.apiProducts[i];
+
+      //   if (config.apiOverrides[apiProduct.name]) {
+      //     for(const p in config.apiOverrides[apiProduct.name]) {
+      //       apiProduct[p] = config.apiOverrides[]
+      //     }
+      //   }
+      // }
+
+      res.setHeader('Content-Type', 'application/json');
       res.send({
         apiproducts: result.apiProducts
       });
@@ -63,6 +116,37 @@ app.get('/apim/developers', (req, res) => {
     if (result) {
       res.setHeader('Content-Type', 'application/json')
       res.send(result);
+    }
+  }).catch((error) => {
+    console.error(error);
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        message: "Server error",
+        status: "SERVER_ERROR"
+      }
+    });
+  });
+});
+
+app.post('/apim/developers', (req, res) => {
+
+  apigeeService.createDeveloper(req.body).then((result) => {
+    if (result) {
+      res.setHeader('Content-Type', 'application/json')
+
+      if (result.error) {
+        res.status(parseInt(result.error.code)).send({
+          error: {
+            code: parseInt(result.error.code),
+            message: result.error.status,
+            status: result.error.status
+          }
+        });
+      }
+      else
+        res.send(result);
     }
   }).catch((error) => {
     console.error(error);
@@ -198,6 +282,35 @@ app.post('/apim/developers/:email/apps', (req, res) => {
 
 app.put('/apim/developers/:email/apps/:appName', (req, res) => {
   apigeeService.updateApp(req.params.email, req.body.name, req.body).then((result) => {
+    if (result) {
+      res.setHeader('Content-Type', 'application/json')
+
+      if (result.error) {
+        res.status(parseInt(result.error.code)).send({
+          error: {
+            code: parseInt(result.error.code),
+            message: result.error.status,
+            status: result.error.status
+          }
+        });
+      }
+      res.send(result);
+    }
+  }).catch((error) => {
+    console.error(error);
+
+    res.status(500).send({
+      error: {
+        code: 500,
+        message: "Server error",
+        status: "SERVER_ERROR"
+      }
+    });
+  });
+});
+
+app.delete('/apim/developers/:email/apps/:appName', (req, res) => {
+  apigeeService.deleteApp(req.params.email, req.params.appName).then((result) => {
     if (result) {
       res.setHeader('Content-Type', 'application/json')
 

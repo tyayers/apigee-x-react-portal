@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-import { getApiProducts, updateApp, updateAppCredential } from '../utils/DataService.mjs';
+import { getApiProducts, updateApp, updateAppCredential, createApp, deleteApp } from '../utils/DataService.mjs';
 // import sections
 import Hero from '../components/sections/Hero';
 import FeaturesTiles from '../components/sections/FeaturesTiles';
@@ -15,15 +13,18 @@ import { getApp } from '../utils/DataService.mjs';
 import copyIcon from '../assets/images/copy_icon.png'
 import showIcon from '../assets/images/show_icon.png'
 import hideIcon from '../assets/images/hide_icon.png'
+import deleteIcon from '../assets/images/delete_icon.svg'
+import refreshIcon from '../assets/images/refresh_icon.svg'
 
 import Switch from "react-switch";
+import { toast } from 'react-toastify';
 
 const AppDetail = (props) => {
   const history = useHistory();
 
   // const [apis, setApis] = useState([]);
   const [appName, setAppName] = useState(props.match.params.app == undefined ? "" : props.match.params.app);  
-  const [isNewApp, setIsNewApp] = useState(appName == undefined ? true : false);
+  const [isNewApp, setIsNewApp] = useState(props.match.params.app == undefined ? true : false);
   const [appDataLoaded, setAppDataLoaded] = useState(false);
 
   const [keyInputType, setKeyInputType] = useState("password");
@@ -102,7 +103,7 @@ const AppDetail = (props) => {
   
     document.body.removeChild(textArea);
 
-    toast.success("Copied!");
+    if (props.toast) props.toast("Copied!");
   }
 
   function appNameChange(event) {
@@ -150,20 +151,21 @@ const AppDetail = (props) => {
 
   function saveApp() {
 
-    app.credentials[0].apiProducts = [];
-
-    for (const [key, value] of Object.entries(apiStatus)) {
-      if (value) {
-        app.credentials[0].apiProducts.push({
-          apiproduct: key,
-          status: "approved"
-        });
-      }
-    }
-    
     if(!isNewApp) {
+
+      app.credentials[0].apiProducts = [];
+
+      for (const [key, value] of Object.entries(apiStatus)) {
+        if (value) {
+          app.credentials[0].apiProducts.push({
+            apiproduct: key,
+            status: "approved"
+          });
+        }
+      }
+
       updateAppCredential(props.user.email, app.name, app.credentials[0]).then((credentialResult) => {
-        
+        if (props.toast) props.toast("App updated!");
       })
       .catch((error) => {
         console.error(error);
@@ -171,6 +173,42 @@ const AppDetail = (props) => {
 
       history.push('/apps');
     }
+    else {
+      if (props.toast) props.toast("App created!");
+
+      app.apiProducts = [];
+      
+      for (const [key, value] of Object.entries(apiStatus)) {
+        if (value) {
+          app.apiProducts.push(key);
+        }
+      }
+
+      createApp(props.user.email, app.name, app).then((result) => {
+        //setApp(result);
+        props.apps.push(result);
+        setAppDataLoaded(false);
+        history.push('/apps');
+        history.push('/apps/' + result.name);
+        window.scrollTo(0, 0);
+      });
+    }
+  }
+
+  function deleteMyApp() {
+    if (toast) toast("App deleted!");
+
+    deleteApp(props.user.email, app.name).then((result) => {
+
+      for( var i = 0; i < props.apps.length; i++){ 
+        if ( props.apps[i].name === app.name) { 
+          props.apps.splice(i, 1);
+          break;
+        }
+      }
+
+      history.push("/apps");
+    });
   }
 
   return (
@@ -188,7 +226,14 @@ const AppDetail = (props) => {
                   Create an app and embrace the API revolution with React web templates connected to Apigee X 🚀.
                 </p>
                 <div class="form">
-                  <div class="form-title">Overview</div>
+                  {/* <div class="form-title">Overview</div> */}
+                  <div style={{display: "flex", alignContent: "space-between", justifyContent: "space-between"}}>
+                    {/* <h3 class="mt-0 mb-16 reveal-from-bottom" style={{textAlign: "left"}} data-reveal-delay="200"><span class="text-color-primary">Apps</span></h3> */}
+                    <span class="form-title">Overview</span>
+                    {!isNewApp &&
+                      <a onClick={deleteMyApp} style={{height: "30px", width: "62px", marginTop: "34px"}} title="Delete app" className="form-submit"><img style={{width: "28px"}} src={deleteIcon}/></a>
+                    }
+                  </div>                  
                   <div class="form-input-container form-ic1">
                     <input id="appname" class="form-input" type="text" placeholder=" " value={app.name} onChange={appNameChange}></input>
                     <div class="form-cut"></div>
@@ -203,9 +248,10 @@ const AppDetail = (props) => {
                     <div>
                       <br />
                       <div style={{display: "flex", alignContent: "space-between", justifyContent: "space-between"}}>
+                        {/* <h3 class="mt-0 mb-16 reveal-from-bottom" style={{textAlign: "left"}} data-reveal-delay="200"><span class="text-color-primary">Apps</span></h3> */}
                         <span class="form-title">Credentials</span>
-                        {/* <button style={{height: "22px", width: "60px", marginTop: "34px"}} class="form-submit">Add</button> */}
-                      </div>
+                        <div style={{height: "30px", width: "62px", marginTop: "34px"}} title="Refresh credentials" className="form-submit"><img style={{width: "28px"}} src={refreshIcon}/></div>
+                      </div>    
                       {app.credentials.map((credential) =>
                         <div>
                           <div class="form-input-container form-ic1">
@@ -300,18 +346,6 @@ const AppDetail = (props) => {
           </div>
           
         </div>
-        <ToastContainer
-          position="bottom-left"
-          autoClose={3000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
       </section>
     </>
   );

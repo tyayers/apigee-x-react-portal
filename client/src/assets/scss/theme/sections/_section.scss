@@ -175,6 +175,7 @@
   color: #eee;
   cursor: pointer;
   font-size: 18px;
+  font-weight: bold;
   height: 50px;
   margin-top: 38px;
   // outline: 0;
@@ -182,6 +183,10 @@
   width: 100%;
 }
 
+.form-submit:hover {
+  background-color: #6c6eff;
+}
+
 .form-submit:active {
-  background-color: #06b;
+  background-color: #5154ff;
 }

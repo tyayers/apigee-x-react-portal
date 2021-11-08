@@ -13,6 +13,9 @@
       "sourceMaps": true,
       "cwd": "${workspaceRoot}/service",
       "protocol": "inspector",
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/home/tyayers/key-bap.json"
+      }
   }
   ]
 }

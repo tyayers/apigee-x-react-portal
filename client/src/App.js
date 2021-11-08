@@ -3,8 +3,10 @@ import { useLocation, Switch, useHistory } from 'react-router-dom';
 import AppRoute from './utils/AppRoute';
 import ScrollReveal from './utils/ScrollReveal';
 import ReactGA from 'react-ga';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-import { getApiProducts, getApps } from './utils/DataService.mjs';
+import { getApiProducts, getApps, getDeveloper, createDeveloper } from './utils/DataService.mjs';
 
 // Layouts
 import LayoutDefault from './layouts/LayoutDefault';
@@ -19,6 +21,7 @@ import ApiDocView from './views/ApiDocView';
 
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/app'
+import { getConfig } from './utils/DataService.mjs';
 var firebaseui = require('firebaseui');
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -51,6 +54,7 @@ const trackPage = page => {
 const App = () => {
   const [user, setUser] = useState();
   const [state, setState] = useState("startup");
+  const [config, setConfig] = useState({});
   const [apiProducts, setApiProducts] = useState([]);
   const [apps, setApps] = useState([]);
 
@@ -58,8 +62,16 @@ const App = () => {
   const childRef = useRef();
   let location = useLocation();
 
+  const showToast = function(message) {
+    toast.success(message);
+  };
+
   useEffect(() => {
     if (!user) {
+
+      getConfig().then((result) => {
+        setConfig(result);
+      });
 
       getApiProducts().then((result) => {
         setApiProducts(result.apiproducts);
@@ -71,9 +83,27 @@ const App = () => {
 
         if (updatedUser) {
           setState("signed-in");
-          getApps(updatedUser.email).then((result) => {
-            setApps(result.apps);
-          }); 
+
+          getDeveloper(updatedUser.email).then((result) => {
+            if (result.error && result.error.code == 404) {
+              // developer doesn't exist in Apigee, so create...
+              createDeveloper(updatedUser.email, updatedUser.displayName, updatedUser.displayName).then((result) => {
+                console.log("Created developer");
+                getApps(updatedUser.email).then((result) => {
+                  setApps(result.apps);
+                }); 
+              }).catch((error) => {
+                console.error(error);
+              });
+            }
+            else {
+              getApps(updatedUser.email).then((result) => {
+                setApps(result.apps);
+              }); 
+            }
+          }).catch((error) => {
+            console.log(error);
+          })
         }
         else {
           setState("signed-out");
@@ -100,19 +130,33 @@ const App = () => {
   }
 
   return (
-    <ScrollReveal
-      ref={childRef}
-      children={() => (
-        <Switch>
-          <AppRoute exact path="/" component={Home} layout={LayoutDefault} user={user} signOut={signOut} state={state}/>
-          <AppRoute exact path="/sign-in" component={SignIn} fb={app} ui={fbui} layout={LayoutDefault}  state={state}/>
-          <AppRoute exact path="/apps" component={Apps} layout={LayoutDefault} user={user} apps={apps} signOut={signOut} state={state}/>
-          <AppRoute exact path="/apps/new" component={AppDetail} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
-          <AppRoute exact path="/apps/:app" component={AppDetail} layout={LayoutDefault} user={user} apis={apiProducts} apps={apps} signOut={signOut} state={state}/>
-          <AppRoute exact path="/apis" component={Apis} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
-          <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
-        </Switch>
-      )} />
+    <>
+      <ScrollReveal
+        ref={childRef}
+        children={() => (
+          <Switch>
+            <AppRoute exact path="/" component={Home} layout={LayoutDefault} user={user} signOut={signOut} state={state}/>
+            <AppRoute exact path="/sign-in" component={SignIn} fb={app} ui={fbui} layout={LayoutDefault}  state={state}/>
+            <AppRoute exact path="/apps" component={Apps} layout={LayoutDefault} user={user} apps={apps} signOut={signOut} state={state}/>
+            <AppRoute exact path="/new-app" component={AppDetail} layout={LayoutDefault} user={user} apps={apps} apis={apiProducts} signOut={signOut} toast={showToast} state={state}/>
+            <AppRoute exact path="/apps/:app" component={AppDetail} layout={LayoutDefault} user={user} apis={apiProducts} apps={apps} signOut={signOut} toast={showToast} state={state}/>
+            <AppRoute exact path="/apis" component={Apis} layout={LayoutDefault} hideEmptyApis={config.hideApisWithoutSpecs} user={user} apis={apiProducts} signOut={signOut} state={state}/>
+            <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
+          </Switch>
+        )} />
+        <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+    </>
   );
 }
 

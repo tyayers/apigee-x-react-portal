@@ -1,3 +1,27 @@
+import firebase from 'firebase/app'
+
+const basePath = "http://localhost:8080"; 
+
+export function getConfig() {
+  return new Promise((resolve, reject) => {
+    fetch(basePath + '/apim/config', {
+      headers: {},        
+    })
+    .then(response => response.json())
+    .then(data => {
+      resolve(data);
+    }).catch(error => {
+      console.error(error);
+      fetch('/testdata/config.json')
+      .then(response => response.json())
+      .then(data => {
+        resolve(data);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  });
+}
 
 /**
  * Function to return either real or testdata of API Products
@@ -5,7 +29,9 @@
  */
 export function getApiProducts() {
   return new Promise((resolve, reject) => {
-    fetch('/apim/apiproducts')
+    fetch(basePath + '/apim/apiproducts', {
+      headers: {},        
+    })
     .then(response => response.json())
     .then(data => {
       resolve(data);
@@ -22,6 +48,66 @@ export function getApiProducts() {
   });
 }
 
+export function getDeveloper(email) {
+  return new Promise((resolve, reject) => {
+    firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+      fetch(basePath + '/apim/developers/' + email, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Authorization': 'Bearer ' + idToken
+        },        
+      })
+      .then(response => response.json())
+      .then(data => {
+        resolve(data);
+      }).catch(error => {
+        console.error(error);
+        fetch('/testdata/developer.json')
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
+      });
+    });
+  });
+}
+
+export function createDeveloper(email, firstName, lastName) {  
+  return new Promise((resolve, reject) => {
+    firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+      fetch(basePath + '/apim/developers/', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + idToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          userName: email,
+          firstName: firstName,
+          lastName: lastName
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        resolve(data);
+      }).catch(error => {
+        console.error(error);
+        reject(error);
+        fetch('/testdata/developer.json')
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
+      });
+    });
+  });
+}
 
 /**
  * Description
@@ -30,18 +116,25 @@ export function getApiProducts() {
  */
 export function getApps(email) {
   return new Promise((resolve, reject) => {
-    fetch('/apim/developers/' + email + '/apps')
-    .then(response => response.json())
-    .then(data => {
-      resolve(data);
-    }).catch(error => {
-      console.error(error);
-      fetch('/testdata/apps.json')
+    firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+      fetch(basePath + '/apim/developers/' + email + '/apps', {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + idToken
+        },        
+      })
       .then(response => response.json())
       .then(data => {
         resolve(data);
-      }).catch((error) => {
-        reject(error);
+      }).catch(error => {
+        console.error(error);
+        fetch('/testdata/apps.json')
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
       });
     });
   });
@@ -55,94 +148,106 @@ export function getApps(email) {
  */
 export function getApp(email, appName) {
   return new Promise((resolve, reject) => {
-    fetch('/apim/developers/' + email + '/apps/' + appName)
-    .then(response => response.json())
-    .then(data => {
-      resolve(data);
-    }).catch(error => {
-      console.error(error);
-      fetch('/testdata/app.json')
+    firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+      fetch(basePath + '/apim/developers/' + email + '/apps/' + appName, {
+        headers: {
+          'Authorization': 'Bearer ' + idToken
+        },        
+      })
       .then(response => response.json())
       .then(data => {
         resolve(data);
-      }).catch((error) => {
-        reject(error);
+      }).catch(error => {
+        console.error(error);
+        fetch('/testdata/app.json')
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
       });
     });
   });
 }
 
-// export function updateAppKeyAddProducts(email, appName, keyName, apiProducts) {  
-//   return new Promise((resolve, reject) => {
-//     fetch('/apim/developers/' + email + '/apps/' + appName + '/keys/' + keyName, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify({
-//         apiProducts: apiProducts
-//       })
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//       resolve(data);
-//     }).catch(error => {
-//       console.error(error);
-//       fetch('/testdata/appcredential.json')
-//       .then(response => response.json())
-//       .then(data => {
-//         resolve(data);
-//       }).catch((error) => {
-//         reject(error);
-//       });
-//     });
-//   });
-// }
-
-// export function updateAppKeyRemoveProduct(email, appName, keyName, apiProduct) {  
-//   return new Promise((resolve, reject) => {
-//     fetch('/apim/developers/' + email + '/apps/' + appName + '/keys/' + keyName + "/apiproducts/" + apiProduct, {
-//       method: 'DELETE',
-//       headers: {
-//         'Content-Type': 'application/json'
-//       }
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//       resolve(data);
-//     }).catch(error => {
-//       console.error(error);
-//       fetch('/testdata/appcredential.json')
-//       .then(response => response.json())
-//       .then(data => {
-//         resolve(data);
-//       }).catch((error) => {
-//         reject(error);
-//       });
-//     });
-//   });
-// }
-
-export function updateApp(email, appName, app) {  
+export function createApp(email, appName, app) {  
   return new Promise((resolve, reject) => {
-    fetch('/apim/developers/' + email + '/apps/' + appName, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(app)
-    })
-    .then(response => response.json())
-    .then(data => {
-      resolve(data);
-    }).catch(error => {
-      console.error(error);
-      fetch('/testdata/app.json')
+    firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+      fetch(basePath + '/apim/developers/' + email + '/apps/', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + idToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(app)
+      })
       .then(response => response.json())
       .then(data => {
         resolve(data);
-      }).catch((error) => {
-        reject(error);
+      }).catch(error => {
+        console.error(error);
+        fetch('/testdata/app.json')
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
+      });
+    });
+  });
+}
+
+export function updateApp(email, appName, app) {  
+  return new Promise((resolve, reject) => {
+    firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+      fetch(basePath + '/apim/developers/' + email + '/apps/' + appName, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + idToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(app)
+      })
+      .then(response => response.json())
+      .then(data => {
+        resolve(data);
+      }).catch(error => {
+        console.error(error);
+        fetch('/testdata/app.json')
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
+      });
+    });
+  });
+}
+
+export function deleteApp(email, appName) {  
+  return new Promise((resolve, reject) => {
+    firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+      fetch(basePath + '/apim/developers/' + email + '/apps/' + appName, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer ' + idToken
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        resolve(data);
+      }).catch(error => {
+        console.error(error);
+        fetch('/testdata/app.json')
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
       });
     });
   });
@@ -150,24 +255,27 @@ export function updateApp(email, appName, app) {
 
 export function updateAppCredential(email, appName, appCredential) {  
   return new Promise((resolve, reject) => {
-    fetch('/apim/developers/' + email + '/apps/' + appName + "/keys/" + appCredential.consumerKey, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(appCredential)
-    })
-    .then(response => response.json())
-    .then(data => {
-      resolve(data);
-    }).catch(error => {
-      console.error(error);
-      fetch('/testdata/app.json')
+    firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
+      fetch(basePath + '/apim/developers/' + email + '/apps/' + appName + "/keys/" + appCredential.consumerKey, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + idToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(appCredential)
+      })
       .then(response => response.json())
       .then(data => {
         resolve(data);
-      }).catch((error) => {
-        reject(error);
+      }).catch(error => {
+        console.error(error);
+        fetch('/testdata/app.json')
+        .then(response => response.json())
+        .then(data => {
+          resolve(data);
+        }).catch((error) => {
+          reject(error);
+        });
       });
     });
   });

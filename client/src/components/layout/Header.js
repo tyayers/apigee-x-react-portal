@@ -119,11 +119,6 @@ const Header = ({
                     <li>
                       <Link to="/apis" onClick={closeMenu}>APIs</Link>
                     </li>
-                    {props.user &&
-                      <li>
-                        <Link to="/apps" onClick={closeMenu}>Apps</Link>
-                      </li>
-                    }                    
                     <li>
                       <Link to="#0" onClick={closeMenu}>Pricing</Link>
                     </li>                    

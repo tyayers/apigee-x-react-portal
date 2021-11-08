@@ -36,7 +36,7 @@ const Apps = (props) => {
                 <div style={{display: "flex", alignContent: "space-between", justifyContent: "space-between"}}>
                   {/* <h3 class="mt-0 mb-16 reveal-from-bottom" style={{textAlign: "left"}} data-reveal-delay="200"><span class="text-color-primary">Apps</span></h3> */}
                   <span class="form-title">Apps</span>
-                  <Link to="/apps/new" style={{height: "30px", width: "93px", marginTop: "34px"}} className="form-submit">New App</Link>
+                  <Link to="/new-app" style={{height: "30px", width: "93px", marginTop: "34px"}} className="form-submit">New App</Link>
                 </div>
                 <br/>
                 {props.apps.map((app) => 

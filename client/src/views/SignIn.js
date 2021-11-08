@@ -6,13 +6,14 @@ import FeaturesSplit from '../components/sections/FeaturesSplit';
 import Testimonial from '../components/sections/Testimonial';
 import Cta from '../components/sections/Cta';
 
+import { getDeveloper, createDeveloper } from '../utils/DataService.mjs'
+
 import firebase from 'firebase/app'
 
 var firebaseui = require('firebaseui');
 
 const SignIn = (props) => {
   const [ui, setUI] = useState();
-
   //setUI(props.ui);
 
   useEffect(() => {
@@ -23,7 +24,10 @@ const SignIn = (props) => {
             // User successfully signed in.
             // Return type determines whether we continue the redirect automatically
             // or whether we leave that to developer to handle.
+
             return true;
+
+
           },
           uiShown: function() {
             // The widget is rendered.
