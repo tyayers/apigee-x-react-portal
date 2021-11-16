@@ -23,15 +23,9 @@ The service directory contains a nodejs project that integrates with a real
 Apigee X org using the [Apigee
 API](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest).
 
-To authenticate with Apigee X, you should set environment variables (either
-locally using an .env file, or in a Dockerfile) for the org, service email, and
-service private key.
-
-```env
-APIGEE_ORG=<<Apigee org name>>
-SERVICE_ACCOUNT_EMAIL=<<GCP service account email>>
-SERVICE_ACCOUNT_KEY=<<GCP service account private key>>
-```
+To authenticate with Apigee X you must use [Google Default Application Credentials](https://cloud.google.com/docs/authentication/production),
+so by either setting an environment variable locally to a key file, or
+deploying to GCP with a service account.
 
 The service will use the configuration to fetch published API products and offer
 them for developers to enable for their credentials.
