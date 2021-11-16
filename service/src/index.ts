@@ -16,7 +16,7 @@ admin.initializeApp({
 
 const config = yaml.load(fs.readFileSync('./config/apiportal.yaml', 'utf8'));
 const app = express();
-const apigeeService: ApiManagementInterface = new ApigeeService(process.env.APIGEE_ORG);
+const apigeeService: ApiManagementInterface = new ApigeeService();
 
 app.use(express.json());
 app.use(cors());
@@ -29,7 +29,7 @@ const publicMethods = [
 
 // Middleware to validate token
 app.use(function (req, res, next) {
-  if (publicMethods.includes(req.url)) {
+  if (publicMethods.includes(req.url) || !req.url.startsWith("/apim/")) {
     next();
   }
   else if (!req.headers.authorization) {
@@ -59,18 +59,6 @@ app.get('/apim/config', (req, res) => {
 app.get('/apim/apiproducts', (req, res) => {
   apigeeService.getApiProducts().then((result) => {
     if (result) {
-
-      // // Set overrides if available
-      // for(const i in result.apiProducts) {
-      //   const apiProduct = result.apiProducts[i];
-
-      //   if (config.apiOverrides[apiProduct.name]) {
-      //     for(const p in config.apiOverrides[apiProduct.name]) {
-      //       apiProduct[p] = config.apiOverrides[]
-      //     }
-      //   }
-      // }
-
       res.setHeader('Content-Type', 'application/json');
       res.send({
         apiproducts: result.apiProducts

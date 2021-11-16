@@ -30,13 +30,13 @@ var firebaseui = require('firebaseui');
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBZ1cFRg67OYBUdPhlO3xoluL8J_dRfHxM",
-  authDomain: "apigee-react-portal.firebaseapp.com",
-  projectId: "apigee-react-portal",
-  storageBucket: "apigee-react-portal.appspot.com",
-  messagingSenderId: "934753593195",
-  appId: "1:934753593195:web:3845dc382bce2b10438e2e",
-  measurementId: "G-RDJS0VD7B8"
+  apiKey: "AIzaSyCPGPFRTmRSdUvGK0LBt_EA3DmP5glyQ1U",
+  authDomain: "bruno-1407a.firebaseapp.com",
+  databaseURL: "https://bruno-1407a.firebaseio.com",
+  projectId: "bruno-1407a",
+  storageBucket: "bruno-1407a.appspot.com",
+  messagingSenderId: "541397649480",
+  appId: "1:541397649480:web:db7de60ee861a0fbe8b07d"
 };
 
 // Initialize Firebase
