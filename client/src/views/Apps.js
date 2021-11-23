@@ -42,24 +42,6 @@ const Apps = (props) => {
                 {props.apps.map((app) => 
                   <Link to={"/apps/" + app.name}><AppCard AppName={app.name} AppApis={app.credentials[0].apiProducts} CreatedDate={app.createdAt} /></Link>
                 )}
-                {/* <table style={{textAlign: "left"}}>
-                  <thead>
-                      <tr>
-                          <th>Name</th>
-                          <th>Description</th>
-                          <th style={{textAlign: "right"}}>Created on</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    {props.apps.map((app) =>
-                      <tr>
-                          <td><Link to={"/apps/" + app.name}>{app.name}</Link></td>
-                          <td><Link to={"/apps/" + app.name}>{app.description}</Link></td>
-                          <td style={{textAlign: "right"}}><Link to={"/apps/" + app.name}>{(new Date(parseFloat(app.createdAt))).toDateString()}</Link></td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table> */}
               </div>
               <div class="tiles-wrap">
 

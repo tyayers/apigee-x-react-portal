@@ -7,32 +7,62 @@ import FeaturesSplit from '../components/sections/FeaturesSplit';
 import Testimonial from '../components/sections/Testimonial';
 import Cta from '../components/sections/Cta';
 import { Link } from 'react-router-dom';
+import SearchInput from '../components/elements/SearchInput';
 
 import apiIcon from '../assets/images/api_icon.svg';
 
 import ApiProduct from '../components/ApiProduct';
 
-const Apis = (props) => {
-  // const [apisLoaded, setApisLoaded] = useState(false);
-  // const [apis, setApis] = useState([]);
+const Apis = ({
+  apis,
+  hideEmptyApis
+}) => {
 
-  // useEffect(() => {
-  //   if (!apisLoaded) {
-  //     getApiProducts().then((result) => {
-  //       setApis(result.apiproducts);
-  //       setApisLoaded(true);
-  //     });
+  const [products, setProducts] = useState([]);
+
+  const [productList, setProductList] = useState([]);
+
+  // const [productList, setProductList] = useState(apis.map((api) => {
+  //   if (api.access === "public") {
+  //     if (api.specUrl) 
+  //       return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
+  //     else if (!hideEmptyApis)
+  //       return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
   //   }
-  // }, apisLoaded);
+  // }));
 
-  const productList = props.apis.map((api) => {
-    if (api.access === "public") {
-      if (api.specUrl) 
-        return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
-      else if (!props.hideEmptyApis)
-        return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
+  // const productList = apis.map((api) => {
+  //   if (api.access === "public") {
+  //     if (api.specUrl) 
+  //       return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
+  //     else if (!hideEmptyApis)
+  //       return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
+  //   }
+  // });
+
+  useEffect(() => {
+    if (productList.length == 0 && apis) {
+      setProductList(apis.map((api) => {
+        if (api.access === "public") {
+          if (api.specUrl) 
+            return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
+          else if (!hideEmptyApis)
+            return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
+        }
+      }));
     }
   });
+
+  const filterApis = function(filterText) {
+    setProductList(apis.map((api) => {
+      if (api.access === "public" && api.name.toLowerCase().includes(filterText.toLowerCase())) {
+        if (api.specUrl) 
+          return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
+        else if (!hideEmptyApis)
+          return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
+      }
+    }));
+  }
 
   return (
     <>
@@ -46,7 +76,13 @@ const Apis = (props) => {
                   Embrace the API revolution with React web templates connected to Apigee X 🚀.
                 </p>
               </div>
+              
+              <div className="container-xs">
+                <SearchInput filterCallback={filterApis}></SearchInput>
+              </div>
+
               <div class="tiles-wrap">
+
                 {productList}
               </div>
             </div>

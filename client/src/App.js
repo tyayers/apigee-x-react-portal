@@ -18,6 +18,7 @@ import Apps from './views/Apps';
 import AppDetail from './views/AppDetail';
 import Apis from './views/Apis';
 import ApiDocView from './views/ApiDocView';
+import { Webhooks } from './views/Webhooks';
 
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/app'
@@ -142,6 +143,7 @@ const App = () => {
             <AppRoute exact path="/apps/:app" component={AppDetail} layout={LayoutDefault} user={user} apis={apiProducts} apps={apps} signOut={signOut} toast={showToast} state={state}/>
             <AppRoute exact path="/apis" component={Apis} layout={LayoutDefault} hideEmptyApis={config.hideApisWithoutSpecs} user={user} apis={apiProducts} signOut={signOut} state={state}/>
             <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
+            <AppRoute exact path="/webhooks" component={Webhooks} layout={LayoutDefault} user={user} state={state}/>
           </Switch>
         )} />
         <ToastContainer
