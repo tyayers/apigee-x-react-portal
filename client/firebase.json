@@ -7,14 +7,18 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [ 
+    "rewrites": [
       {
         "source": "/apim/**",
         "run": {
           "serviceId": "apigee-portal",
           "region": "europe-west1"
         }
-      }    
+      },      
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
    ]
   }
 }
