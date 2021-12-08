@@ -2,11 +2,20 @@
   "apiproducts": [
     {
       "name": "Math API",
+      "type": "REST",
       "description": "This API is for testing your math skills.",
       "imageUrl": "https://raw.githubusercontent.com/tyayers/apigee-math-api/main/images/calculator.svg",
       "specUrl": "https://raw.githubusercontent.com/tyayers/apigee-math-api/main/specs/math-api-v1.yaml",
       "access": "public"
     },
+    {
+      "name": "Orders API",
+      "type": "GraphQL",
+      "imageUrl": "/order.svg",
+      "specUrl": "https://orderservice-graphql-h7pi7igbcq-ew.a.run.app/",
+      "description": "Geolocation service for all location queries.",
+      "access": "public"
+    },    
     {
       "name": "Maps API",
       "description": "Geolocation service for all location queries.",

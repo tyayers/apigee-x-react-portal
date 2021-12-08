@@ -44,11 +44,13 @@ export default function ProfileHeader({
     <>
       <img id="profileButton" src={user.photoURL} style={picStyle} onClick={() => setMenuOpen(!menuOpen)}></img>
       {menuOpen &&
-        <div>
+        <div style={{position: 'relative', left: '-94px'}}>
           <div style={backStyle} onClick={() => setMenuOpen(!menuOpen)}></div>
           {/* <div style={{width: "0px", marginLeft: "10px", borderBottom: "13px solid rgb(37, 40, 44)", borderLeft: "13px solid transparent", borderRight: "13px solid transparent"}}></div> */}
           <div style={menuStyle} >
-            <Link to="/apps" style={{padding: "0px"}} onClick={() => setMenuOpen(false)}><div>Apps</div></Link>
+            <Link to="/apps" style={{padding: "0px"}} onClick={() => setMenuOpen(false)}><div>Your Apps</div></Link>
+            <Link to="/hooks" style={{padding: "0px"}} onClick={() => setMenuOpen(false)}><div>Your Hooks</div></Link>
+            <Link to="/subscriptions" style={{padding: "0px"}} onClick={() => setMenuOpen(false)}><div>Your Subscriptions</div></Link>
             <Link to="/" style={{padding: "0px"}} onClick={() => doSignOut()}><div>Sign out</div></Link>
           </div>
         </div>

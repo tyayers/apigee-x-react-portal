@@ -14,11 +14,16 @@ import LayoutDefault from './layouts/LayoutDefault';
 // Views 
 import Home from './views/Home';
 import SignIn from './views/SignIn';
-import Apps from './views/Apps';
+import YourApps from './views/YourApps';
 import AppDetail from './views/AppDetail';
 import Apis from './views/Apis';
 import ApiDocView from './views/ApiDocView';
+import ApiDocGQLView from './views/ApiDocGQLView';
 import { Webhooks } from './views/Webhooks';
+import { Pricing } from './views/Pricing';
+import { Documentation } from './views/Documentation';
+import { YourSubscriptions } from './views/YourSubscriptions';
+import { YourHooks } from './views/YourHooks';
 
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/app'
@@ -138,12 +143,17 @@ const App = () => {
           <Switch>
             <AppRoute exact path="/" component={Home} layout={LayoutDefault} user={user} signOut={signOut} state={state}/>
             <AppRoute exact path="/sign-in" component={SignIn} fb={app} ui={fbui} layout={LayoutDefault}  state={state}/>
-            <AppRoute exact path="/apps" component={Apps} layout={LayoutDefault} user={user} apps={apps} signOut={signOut} state={state}/>
+            <AppRoute exact path="/apps" component={YourApps} layout={LayoutDefault} user={user} apps={apps} signOut={signOut} state={state}/>
             <AppRoute exact path="/new-app" component={AppDetail} layout={LayoutDefault} user={user} apps={apps} apis={apiProducts} signOut={signOut} toast={showToast} state={state}/>
             <AppRoute exact path="/apps/:app" component={AppDetail} layout={LayoutDefault} user={user} apis={apiProducts} apps={apps} signOut={signOut} toast={showToast} state={state}/>
             <AppRoute exact path="/apis" component={Apis} layout={LayoutDefault} hideEmptyApis={config.hideApisWithoutSpecs} user={user} apis={apiProducts} signOut={signOut} state={state}/>
             <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
+            <AppRoute exact path="/gqlapis/:api" component={ApiDocGQLView} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
             <AppRoute exact path="/webhooks" component={Webhooks} layout={LayoutDefault} user={user} state={state}/>
+            <AppRoute exact path="/pricing" component={Pricing} layout={LayoutDefault} user={user} state={state}/>
+            <AppRoute exact path="/docs" component={Documentation} layout={LayoutDefault} user={user} state={state}/>
+            <AppRoute exact path="/hooks" component={YourHooks} layout={LayoutDefault} user={user} state={state}/>
+            <AppRoute exact path="/subscriptions" component={YourSubscriptions} layout={LayoutDefault} user={user} state={state}/>
           </Switch>
         )} />
         <ToastContainer

@@ -11,7 +11,7 @@ import SearchInput from '../components/elements/SearchInput';
 
 import apiIcon from '../assets/images/api_icon.svg';
 
-import ApiProduct from '../components/ApiProduct';
+import ApiProduct from '../components/elements/ApiProduct';
 
 const Apis = ({
   apis,
@@ -22,33 +22,11 @@ const Apis = ({
 
   const [productList, setProductList] = useState([]);
 
-  // const [productList, setProductList] = useState(apis.map((api) => {
-  //   if (api.access === "public") {
-  //     if (api.specUrl) 
-  //       return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
-  //     else if (!hideEmptyApis)
-  //       return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
-  //   }
-  // }));
-
-  // const productList = apis.map((api) => {
-  //   if (api.access === "public") {
-  //     if (api.specUrl) 
-  //       return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
-  //     else if (!hideEmptyApis)
-  //       return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
-  //   }
-  // });
-
   useEffect(() => {
-    if (productList.length == 0 && apis) {
+    if (productList.length == 0 && apis && apis.length > 0) {
       setProductList(apis.map((api) => {
         if (api.access === "public") {
-          if (api.specUrl) 
-            return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
-          else if (!hideEmptyApis)
-            return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
-        }
+          return getProductFormatted(api);        }
       }));
     }
   });
@@ -56,12 +34,19 @@ const Apis = ({
   const filterApis = function(filterText) {
     setProductList(apis.map((api) => {
       if (api.access === "public" && api.name.toLowerCase().includes(filterText.toLowerCase())) {
-        if (api.specUrl) 
-          return <Link to={"/apis/" + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} /></Link>
-        else if (!hideEmptyApis)
-          return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} description={api.description} image={api.imageUrl} />
+        return getProductFormatted(api);
       }
     }));
+  }
+
+  function getProductFormatted(api) {
+    var path = "/apis/";
+    if (api.type == "GraphQL") path = "/gqlapis/";
+
+    if (api.specUrl) 
+      return <Link to={path + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={api.type} description={api.description} image={api.imageUrl} /></Link>
+    else if (!hideEmptyApis)
+      return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={api.type} description={api.description} image={api.imageUrl} />
   }
 
   return (
@@ -70,7 +55,7 @@ const Apis = ({
         <div className="container">
           <div className="testimonial-inner section-inner">
             <div className="testimonial-content  reveal-from-bottom">
-              <h1 class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">Our <span class="text-color-primary">APIs</span></h1>
+              <h1 class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">Cloud10X <span class="text-color-primary">APIs</span></h1>
               <div className="container-xs">
                 <p className="m-0 mb-32 reveal-from-bottom" data-reveal-delay="400">
                   Embrace the API revolution with React web templates connected to Apigee X 🚀.

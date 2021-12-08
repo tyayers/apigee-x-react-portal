@@ -62,14 +62,15 @@ const Hero = ({
           <div className="hero-content">
             <h1 className="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">
               Liberate your data with <span className="text-color-primary">APIs</span>
+              {/* Liberate your data with <span className="text-color-primary">APIs</span> */}
             </h1>
             <div className="container-xs">
               <p className="m-0 mb-32 reveal-from-bottom" data-reveal-delay="400">
-                Embrace the API revolution with React web templates connected to Apigee X 🚀.
-                </p>
+                Cloud10X powers Industry API and Eventing Ecosystems of Data Exchange 🚀.
+              </p>
               <div className="reveal-from-bottom" data-reveal-delay="600">
                 <ButtonGroup>
-                  <Button tag="a" color="primary" wideMobile href="https://cruip.com/">
+                  <Button tag="a" color="primary" wideMobile href="/docs">
                     Get started
                     </Button>
                   <Button tag="a" color="dark" wideMobile href="https://github.com/cruip/open-react-template/">
@@ -81,7 +82,7 @@ const Hero = ({
           </div>
           <div className="hero-figure reveal-from-bottom illustration-element-01" data-reveal-value="20px" data-reveal-delay="800">
             <a
-              data-video="https://player.vimeo.com/video/174002812"
+              data-video="https://www.youtube.com/watch?v=vGe38icp0n4"
               href="#0"
               aria-controls="video-modal"
               onClick={openModal}
@@ -97,9 +98,9 @@ const Hero = ({
           <Modal
             id="video-modal"
             show={videoModalActive}
-            handleClose={closeModal}
-            video="https://player.vimeo.com/video/174002812"
-            videoTag="iframe" />
+            handleClose={closeModal}>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/58smxQu3P5k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </Modal>
         </div>
       </div>
     </section>

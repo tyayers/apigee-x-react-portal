@@ -123,10 +123,10 @@ const Header = ({
                       <Link to="/webhooks" onClick={closeMenu}>Webhooks</Link>
                     </li>                    
                     <li>
-                      <Link to="#0" onClick={closeMenu}>Pricing</Link>
+                      <Link to="/pricing" onClick={closeMenu}>Pricing</Link>
                     </li>                    
                     <li>
-                      <Link to="#0" onClick={closeMenu}>Documentation</Link>
+                      <Link to="/docs" onClick={closeMenu}>Get Started</Link>
                     </li>
                   </ul>
                   {props.state == "signed-out" &&

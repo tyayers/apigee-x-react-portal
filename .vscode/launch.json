@@ -14,7 +14,7 @@
       "cwd": "${workspaceRoot}/service",
       "protocol": "inspector",
       "env": {
-        "GOOGLE_APPLICATION_CREDENTIALS": "/home/tyayers/key.json"
+        "GOOGLE_APPLICATION_CREDENTIALS": "/home/tylerayers/key.json"
       }
   }
   ]

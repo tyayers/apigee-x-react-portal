@@ -7,8 +7,6 @@ import FeaturesSplit from '../components/sections/FeaturesSplit';
 import Testimonial from '../components/sections/Testimonial';
 import Cta from '../components/sections/Cta';
 
-import ApiProduct from '../components/ApiProduct';
-
 const ApiDocView = (props) => {
   const [apiName, setApiName] = useState(props.match.params.api == undefined ? "" : props.match.params.api);
   const [apiProduct, setApiProduct] = useState(undefined);
