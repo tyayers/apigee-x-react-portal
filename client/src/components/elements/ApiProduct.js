@@ -7,7 +7,15 @@ const ApiProduct = (props) => {
     textAlign: "right"
   }
 
-  const tagLabelStyle = {
+  const graphQlLabelStyle = {
+    background: "#DE33A6",
+    padding: "5px",
+    fontSize: "15px",
+    fontWeight: "bold",
+    borderRadius: "14px"
+  }  
+
+  const restLabelStyle = {
     background: "#5658DD",
     padding: "5px",
     fontSize: "15px",
@@ -19,14 +27,14 @@ const ApiProduct = (props) => {
     <div className="tiles-item" data-reveal-delay="200">
       <div className="tiles-item-inner" style={{borderRadius: "12%"}}>
 
-      {props.type
+      {props.type && props.type == "graphql"
       ?
       <div style={typeTagStyle}>
-        <span style={tagLabelStyle}>{props.type}</span>
+        <span style={graphQlLabelStyle}>{props.type.toUpperCase()}</span>
       </div>
       :
       <div style={typeTagStyle}>
-        <span style={tagLabelStyle}>REST</span>
+        <span style={restLabelStyle}>REST</span>
       </div>      
       }
 

@@ -31,7 +31,7 @@ const ApiDocGQLView = (props) => {
             </div>
           </div>
           <div className="container">
-            <iframe style={{width: "100%", height: "800px", border: "0px"}} src={apiProductSpec}>
+            <iframe style={{width: "100%", height: "800px", border: "0px", borderRadius: "44px"}} src={apiProductSpec}>
 
             </iframe>
           </div>

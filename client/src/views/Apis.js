@@ -41,12 +41,14 @@ const Apis = ({
 
   function getProductFormatted(api) {
     var path = "/apis/";
-    if (api.type == "GraphQL") path = "/gqlapis/";
+    var type = api.type ? api.type.toLowerCase() : "rest";
+
+    if (type == "graphql") path = "/gqlapis/";
 
     if (api.specUrl) 
-      return <Link to={path + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={api.type} description={api.description} image={api.imageUrl} /></Link>
+      return <Link to={path + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={type} description={api.description} image={api.imageUrl} /></Link>
     else if (!hideEmptyApis)
-      return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={api.type} description={api.description} image={api.imageUrl} />
+      return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={type} description={api.description} image={api.imageUrl} />
   }
 
   return (
