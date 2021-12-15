@@ -21,22 +21,94 @@ const Apis = ({
   const [products, setProducts] = useState([]);
 
   const [productList, setProductList] = useState([]);
+  const [categoryProductList, setCategoryProductList] = useState({});
+
+  const [filterText, setFilterText] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState({});
+  const [selectedProtocols, setSelectedProtocols] = useState({});
 
   useEffect(() => {
     if (productList.length == 0 && apis && apis.length > 0) {
-      setProductList(apis.map((api) => {
-        if (api.access === "public") {
-          return getProductFormatted(api);        }
-      }));
+      for (var apiIndex in apis) {
+        let api = apis[apiIndex];
+        if (api.type && !(api.type in Object.keys(selectedProtocols))) {
+          var newProtocols = selectedProtocols;
+          newProtocols[api.type] = true
+          setSelectedProtocols(newProtocols);
+        }
+
+        if (api.categories) {
+          for (var catIndex in api.categories) {
+            var catName = api.categories[catIndex];
+  
+            if (! (catName in Object.keys(selectedCategories))) {
+              var newSelectedCategories = selectedCategories;
+              newSelectedCategories[catName] = true;
+              setSelectedCategories(newSelectedCategories);
+            }
+          }
+        }       
+      }
     }
   });
 
-  const filterApis = function(filterText) {
+  useEffect(() => {
+    console.log('Do something after state has changed');
+    buildApiList();
+  }, [apis, filterText, selectedProtocols, selectedCategories]);
+
+  const filterApis = function(filterText, selProtocols, selCategories) {
+    setFilterText(filterText);
+    setSelectedProtocols(selProtocols);
+    setSelectedCategories(selCategories);
+  }
+
+  function buildApiList() {
     setProductList(apis.map((api) => {
-      if (api.access === "public" && api.name.toLowerCase().includes(filterText.toLowerCase())) {
-        return getProductFormatted(api);
+      if (checkApiToDisplay(api)
+        && (!api.categories || api.categories.length == 0)) {
+        return getProductFormatted(api);        
       }
     }));
+
+    var newCategoryProductList = {};
+    for (var apiIndex in apis) {
+      var api = apis[apiIndex];
+      if (checkApiToDisplay(api)
+        && (api.categories && api.categories.length > 0)) {
+
+        for (var catIndex in api.categories) {
+          var catName = api.categories[catIndex];
+
+          if (! (newCategoryProductList[catName])) 
+            newCategoryProductList[catName] = [ getProductFormatted(api) ];
+          else
+            newCategoryProductList[catName].push(getProductFormatted(api));
+        }
+      }
+    }
+
+    setCategoryProductList(newCategoryProductList);
+  }
+
+  function checkApiToDisplay(api) {
+    let result = false;
+    if (api.access === "public"
+      && api.name.toLowerCase().includes(filterText.toLowerCase())
+      && (!api.type || Object.keys(selectedProtocols).length == 0 || selectedProtocols[api.type])) {
+        if (api.categories && api.categories.length > 0 && Object.keys(selectedCategories).length > 0) {
+          for (var cat in api.categories) {
+            if (selectedCategories[api.categories[cat]]) {
+              result = true;
+              break;
+            }
+          }
+        }
+        else
+          result = true;
+      }
+
+    return result;
   }
 
   function getProductFormatted(api) {
@@ -49,6 +121,18 @@ const Apis = ({
       return <Link to={path + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={type} description={api.description} image={api.imageUrl} /></Link>
     else if (!hideEmptyApis)
       return <ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={type} description={api.description} image={api.imageUrl} />
+  }
+
+  function getProductCategoriesList() {
+    return Object.keys(categoryProductList).map((category) => 
+      selectedCategories[category] &&
+        <div>
+          <h3>{category} <span class="text-color-primary">APIs</span></h3>
+          <div class="container tiles-wrap" style={{textAlign: "center"}}>
+            {categoryProductList[category]}
+          </div>
+        </div>
+    );
   }
 
   return (
@@ -65,13 +149,14 @@ const Apis = ({
               </div>
               
               <div className="container-xs">
-                <SearchInput filterCallback={filterApis}></SearchInput>
+                <SearchInput filterCallback={filterApis} protocols={selectedProtocols} categories={selectedCategories}></SearchInput>
               </div>
 
-              <div class="tiles-wrap">
-
+              <div class="container tiles-wrap" style={{textAlign: "center"}}>
                 {productList}
               </div>
+
+              {getProductCategoriesList()}
             </div>
 
           </div>

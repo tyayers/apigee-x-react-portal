@@ -3,7 +3,6 @@
     {
       "name": "Math API",
       "type": "REST",
-      "categories": ["Math", "Getting Started"],
       "description": "This API is for testing your math skills.",
       "imageUrl": "https://raw.githubusercontent.com/tyayers/apigee-math-api/main/images/calculator.svg",
       "specUrl": "https://raw.githubusercontent.com/tyayers/apigee-math-api/main/specs/math-api-v1.yaml",
@@ -11,7 +10,6 @@
     },
     {
       "name": "Orders API",
-      "categories": ["Order Management", "Getting Started"],
       "type": "GraphQL",
       "imageUrl": "/order.svg",
       "specUrl": "https://orderservice-graphql-h7pi7igbcq-ew.a.run.app/",
