@@ -12,9 +12,15 @@
       "name": "Orders API",
       "type": "GraphQL",
       "imageUrl": "/order.svg",
-      "specUrl": "https://orderservice-graphql-h7pi7igbcq-ew.a.run.app/",
+      "specUrl": "https://test.apigee.hybrid.cloud10x.net/orders-graphql/query",
       "description": "Geolocation service for all location queries.",
-      "access": "public"
+      "access": "public",
+      "attributes": [
+        {
+          "name": "testQuery",
+          "value": "{orders {SalesOrder, CreatedByUser}}"
+        }
+      ]
     },    
     {
       "name": "Maps API",

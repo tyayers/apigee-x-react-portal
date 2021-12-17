@@ -5,7 +5,7 @@ import cors from 'cors';
 import yaml from 'js-yaml'
 import admin from 'firebase-admin'
 
-import {ApigeeService, ApiManagementInterface, Developers} from 'apigee-x-module'
+import { ApigeeService, ApiManagementInterface, Developers } from 'apigee-x-module'
 import { applicationDefault } from 'firebase-admin/app';
 
 require('dotenv').config()

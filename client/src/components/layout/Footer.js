@@ -45,7 +45,8 @@ const Footer = ({
           </div>
           <div className="footer-bottom space-between text-xxs invert-order-desktop">
             <FooterNav />
-            <div className="footer-copyright">Style based on <a href="https://github.com/cruip/open-react-template">github.com/cruip/open-react-template</a>.</div>
+            <div className="footer-copyright">Style based on <a href="https://github.com/cruip/open-react-template">github.com/cruip/open-react-template</a>.<br/>
+            Powered by <a href="https://cloud.google.com">Google Cloud</a> & <a href="https://cloud.google.com/apigee">Apigee</a>.</div>
           </div>
         </div>
       </div>

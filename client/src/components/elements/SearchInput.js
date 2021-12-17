@@ -54,33 +54,35 @@ export default function SearchInput({
         <a className="search_icon filter_icon" style={{ position: "relative", top: "-30px" }} onClick={() => setFilterBoxVisible(!filterBoxVisible)}><i class="fas fa-bars"></i></a>
       </div>
       {filterBoxVisible &&
-          <div style={{textAlign: "left", fontSize: "14px", marginLeft: "20px"}}>
-
+          <div style={{textAlign: "left", fontSize: "14px", marginLeft: "20px", marginBottom: "5px", userSelect: "none"}}>
             <div>Protocols</div>
-              {Object.keys(selectedProtocols).map((protocol, i) =>
-                <label style={{marginLeft: getCategoryMargin(i)}} key={protocol}>
-                  <Switch
-                    checked={selectedProtocols[protocol]}
-                    onChange={(e) => toggleProtocol(protocol)}
-                    onColor="#6163FF"
-                    onHandleColor="#5658DD"
-                    handleDiameter={30}
-                    uncheckedIcon={false}
-                    checkedIcon={false}
-                    boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-                    activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-                    height={15}
-                    width={38}
-                    className="react-switch"
-                    id={"material-switch-"}
-                    key={protocol}
-                  />
-                  <span style={{position: "relative", top: "-10px", left: "5px"}}>{protocol}</span>
-                </label>
-              )}
+            { Object.keys(selectedProtocols).map((protocol, i) =>
+              <label style={{marginLeft: getCategoryMargin(i)}} key={protocol}>
+                <Switch
+                  checked={selectedProtocols[protocol]}
+                  onChange={(e) => toggleProtocol(protocol)}
+                  onColor="#6163FF"
+                  onHandleColor="#5658DD"
+                  handleDiameter={30}
+                  uncheckedIcon={false}
+                  checkedIcon={false}
+                  boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                  activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                  height={15}
+                  width={38}
+                  className="react-switch"
+                  id={"material-switch-"}
+                  key={protocol}
+                />
+                <span style={{position: "relative", top: "-10px", left: "5px"}}>{protocol.toUpperCase()}</span>
+              </label>
+            )}
 
-            <div>Categories</div>
-              {Object.keys(selectedCategories).map((category, i) =>
+            { Object.keys(selectedCategories).length > 1 &&
+              <div>Categories</div>
+            }
+            { Object.keys(selectedCategories).length > 1 &&
+              Object.keys(selectedCategories).map((category, i) =>
                 <label style={{marginLeft: getCategoryMargin(i)}} key={category}>
                   <Switch
                     checked={selectedCategories[category]}
@@ -99,7 +101,8 @@ export default function SearchInput({
                   />
                   <span style={{position: "relative", top: "-10px", left: "5px"}}>{category}</span>
                 </label>
-              )}
+            )
+            }
           </div>
         }
     </div>

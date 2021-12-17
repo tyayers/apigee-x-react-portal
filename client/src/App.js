@@ -62,7 +62,7 @@ const App = () => {
   const [state, setState] = useState("startup");
   const [config, setConfig] = useState({});
   const [apiProducts, setApiProducts] = useState([]);
-  const [apps, setApps] = useState([]);
+  const [apps, setApps] = useState(undefined);
 
   const history = useHistory();
   const childRef = useRef();
@@ -147,8 +147,8 @@ const App = () => {
             <AppRoute exact path="/new-app" component={AppDetail} layout={LayoutDefault} user={user} apps={apps} apis={apiProducts} signOut={signOut} toast={showToast} state={state}/>
             <AppRoute exact path="/apps/:app" component={AppDetail} layout={LayoutDefault} user={user} apis={apiProducts} apps={apps} signOut={signOut} toast={showToast} state={state}/>
             <AppRoute exact path="/apis" component={Apis} layout={LayoutDefault} hideEmptyApis={config.hideApisWithoutSpecs} user={user} apis={apiProducts} signOut={signOut} state={state}/>
-            <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
-            <AppRoute exact path="/gqlapis/:api" component={ApiDocGQLView} layout={LayoutDefault} user={user} apis={apiProducts} signOut={signOut} state={state}/>
+            <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault} apps={apps} user={user} apis={apiProducts} signOut={signOut} state={state}/>
+            <AppRoute exact path="/gqlapis/:api" component={ApiDocGQLView} layout={LayoutDefault} apps={apps} user={user} apis={apiProducts} signOut={signOut} state={state}/>
             <AppRoute exact path="/webhooks" component={Webhooks} layout={LayoutDefault} user={user} state={state}/>
             <AppRoute exact path="/pricing" component={Pricing} layout={LayoutDefault} user={user} state={state}/>
             <AppRoute exact path="/docs" component={Documentation} layout={LayoutDefault} user={user} state={state}/>

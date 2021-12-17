@@ -1,10 +1,11 @@
 import firebase from 'firebase/app'
 
-const basePath = ""; 
+//const basePath = "http://localhost:8080/"; 
+const basePath = "";
 
 export function getConfig() {
   return new Promise((resolve, reject) => {
-    fetch(basePath + '/apim/config', {
+    fetch(basePath + 'apim/config', {
       headers: {},        
     })
     .then(response => response.json())
@@ -29,7 +30,7 @@ export function getConfig() {
  */
 export function getApiProducts() {
   return new Promise((resolve, reject) => {
-    fetch(basePath + '/apim/apiproducts', {
+    fetch(basePath + 'apim/apiproducts', {
       headers: {},        
     })
     .then(response => response.json())
@@ -37,7 +38,7 @@ export function getApiProducts() {
       resolve(data);
     }).catch(error => {
       console.error(error);
-      fetch('/testdata/apiproducts.json')
+      fetch('/testdata/apiproducts_1.json')
       .then(response => response.json())
       .then(data => {
         resolve(data);
@@ -51,7 +52,7 @@ export function getApiProducts() {
 export function getDeveloper(email) {
   return new Promise((resolve, reject) => {
     firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-      fetch(basePath + '/apim/developers/' + email, {
+      fetch(basePath + 'apim/developers/' + email, {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -78,7 +79,7 @@ export function getDeveloper(email) {
 export function createDeveloper(email, firstName, lastName) {  
   return new Promise((resolve, reject) => {
     firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-      fetch(basePath + '/apim/developers/', {
+      fetch(basePath + 'apim/developers/', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + idToken,
@@ -117,7 +118,7 @@ export function createDeveloper(email, firstName, lastName) {
 export function getApps(email) {
   return new Promise((resolve, reject) => {
     firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-      fetch(basePath + '/apim/developers/' + email + '/apps', {
+      fetch(basePath + 'apim/developers/' + email + '/apps', {
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + idToken
@@ -149,7 +150,7 @@ export function getApps(email) {
 export function getApp(email, appName) {
   return new Promise((resolve, reject) => {
     firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-      fetch(basePath + '/apim/developers/' + email + '/apps/' + appName, {
+      fetch(basePath + 'apim/developers/' + email + '/apps/' + appName, {
         headers: {
           'Authorization': 'Bearer ' + idToken
         },        
@@ -174,7 +175,7 @@ export function getApp(email, appName) {
 export function createApp(email, appName, app) {  
   return new Promise((resolve, reject) => {
     firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-      fetch(basePath + '/apim/developers/' + email + '/apps/', {
+      fetch(basePath + 'apim/developers/' + email + '/apps/', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + idToken,
@@ -202,7 +203,7 @@ export function createApp(email, appName, app) {
 export function updateApp(email, appName, app) {  
   return new Promise((resolve, reject) => {
     firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-      fetch(basePath + '/apim/developers/' + email + '/apps/' + appName, {
+      fetch(basePath + 'apim/developers/' + email + '/apps/' + appName, {
         method: 'PUT',
         headers: {
           'Authorization': 'Bearer ' + idToken,
@@ -230,7 +231,7 @@ export function updateApp(email, appName, app) {
 export function deleteApp(email, appName) {  
   return new Promise((resolve, reject) => {
     firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-      fetch(basePath + '/apim/developers/' + email + '/apps/' + appName, {
+      fetch(basePath + 'apim/developers/' + email + '/apps/' + appName, {
         method: 'DELETE',
         headers: {
           'Authorization': 'Bearer ' + idToken
@@ -256,7 +257,7 @@ export function deleteApp(email, appName) {
 export function updateAppCredential(email, appName, appCredential) {  
   return new Promise((resolve, reject) => {
     firebase.auth().currentUser.getIdToken(false).then(function(idToken) {
-      fetch(basePath + '/apim/developers/' + email + '/apps/' + appName + "/keys/" + appCredential.consumerKey, {
+      fetch(basePath + 'apim/developers/' + email + '/apps/' + appName + "/keys/" + appCredential.consumerKey, {
         method: 'PUT',
         headers: {
           'Authorization': 'Bearer ' + idToken,

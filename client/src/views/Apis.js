@@ -31,7 +31,9 @@ const Apis = ({
     if (productList.length == 0 && apis && apis.length > 0) {
       for (var apiIndex in apis) {
         let api = apis[apiIndex];
-        if (api.type && !(api.type in Object.keys(selectedProtocols))) {
+        if (!api.type) api.type = "REST";
+
+        if (!(api.type in Object.keys(selectedProtocols))) {
           var newProtocols = selectedProtocols;
           newProtocols[api.type] = true
           setSelectedProtocols(newProtocols);

@@ -11,6 +11,7 @@ const ApiDocView = (props) => {
   const [apiName, setApiName] = useState(props.match.params.api == undefined ? "" : props.match.params.api);
   const [apiProduct, setApiProduct] = useState(undefined);
   const [apiProductSpec, setApiProductSpec] = useState();
+  const [apiKey, setApiKey] = useState("");
 
   useEffect(() => {
     if (!apiProduct && props.apis && props.apis.length > 0) {
@@ -21,6 +22,24 @@ const ApiDocView = (props) => {
         }
       }
     }
+
+    if (!apiKey && props.apps && props.apps.length > 0) {
+      var key = "";
+      for (var appIndex in props.apps) {
+        if (props.apps[appIndex].credentials) {
+          for (var credIndex in props.apps[appIndex].credentials) {
+            for (var apiProdIndex in props.apps[appIndex].credentials[credIndex].apiProducts) {
+              if (props.apps[appIndex].credentials[credIndex].apiProducts[apiProdIndex].apiproduct == apiName) {
+                // YES WE FOUND IT, WOOPEE!!!
+                key = props.apps[appIndex].credentials[credIndex].consumerKey;
+                setApiKey(key);
+                break;
+              }
+            }
+          }
+        }
+      }
+    }    
   });  
 
   return (
@@ -41,6 +60,9 @@ const ApiDocView = (props) => {
               spec-url={apiProductSpec}
               show-header = 'false'
               show-info = 'true'
+              api-key-name = 'x-api-key'
+              api-key-location = 'header'
+              api-key-value = {apiKey}
               allow-authentication ='true'
               allow-server-selection = 'false'
               allow-api-list-style-selection ='false'

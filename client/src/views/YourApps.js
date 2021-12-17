@@ -22,7 +22,7 @@ const Apps = (props) => {
               <h1 class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">Your <span class="text-color-primary">Apps</span></h1>
               <div className="container-xs">
                 <p className="m-0 mb-32 reveal-from-bottom" data-reveal-delay="400">
-                  Embrace the API revolution with React web templates connected to Apigee X 🚀.
+                  Embrace the API revolution with React web templates connected to Apigee X 🚀
                 </p>
                 <div style={{display: "flex", alignContent: "space-between", justifyContent: "space-between"}}>
                   {/* <h3 class="mt-0 mb-16 reveal-from-bottom" style={{textAlign: "left"}} data-reveal-delay="200"><span class="text-color-primary">Apps</span></h3> */}
@@ -30,7 +30,8 @@ const Apps = (props) => {
                   <Link to="/new-app" style={{height: "30px", width: "93px", marginTop: "34px"}} className="form-submit">New App</Link>
                 </div>
                 <br/>
-                {props.apps.map((app) => 
+                { props.apps &&
+                  props.apps.map((app) => 
                   <Link to={"/apps/" + app.name}><AppCard AppName={app.name} AppApis={app.credentials[0].apiProducts} CreatedDate={app.createdAt} /></Link>
                 )}
               </div>
