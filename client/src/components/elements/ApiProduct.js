@@ -27,14 +27,14 @@ const ApiProduct = (props) => {
     <div className="tiles-item" data-reveal-delay="200">
       <div className="tiles-item-inner" style={{borderRadius: "12%"}}>
 
-      {props.type && props.type == "graphql"
+      {props.type && props.type.toLowerCase() == "graphql"
       ?
       <div style={typeTagStyle}>
-        <span style={graphQlLabelStyle}>{props.type.toUpperCase()}</span>
+        <span style={graphQlLabelStyle}>{props.type}</span>
       </div>
       :
       <div style={typeTagStyle}>
-        <span style={restLabelStyle}>REST</span>
+        <span style={restLabelStyle}>{props.type}</span>
       </div>      
       }
 

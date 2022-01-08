@@ -8,6 +8,7 @@ const ApiDocGQLView = (props) => {
   const [apiProduct, setApiProduct] = useState(undefined);
   const [apiProductSpec, setApiProductSpec] = useState();
   const [apiKey, setApiKey] = useState("");
+  const [apiKeySearchFlag, setApiKeySearchFlag] = useState(false);
   const [testQuery, setTestQuery] = useState("");
 
   const [tabConfig, setTabConfig] = useState([]);
@@ -44,6 +45,8 @@ const ApiDocGQLView = (props) => {
           }
         }
       }
+
+      setApiKeySearchFlag(true);
     }
   });  
 
@@ -65,11 +68,11 @@ const ApiDocGQLView = (props) => {
             {props.state == "signed-out" &&
               <div>Only registered users can explore this API. <br/> Register for free <Link to="/sign-in"><span className="text-color-primary">here.</span></Link><br/><br/></div>
             }
-            {!apiKey && props.apps &&
+            {apiKeySearchFlag && !apiKey && props.apps &&
               <div>You don't yet have an app with access to this API. <br/> Manage your apps <Link to="/apps"><span className="text-color-primary">here.</span></Link><br/><br/></div>
             }
             { apiKey &&
-                <div style={{border: "0px", borderRadius: "44px", overflow: "hidden", textAlign: "left"}}>
+                <div style={{border: "0px", borderRadius: "44px", overflow: "hidden", textAlign: "left", height: "700px"}}>
                   <Provider store={store}>
                     <Playground endpoint={apiProductSpec} tabs={[{
                       query: testQuery,

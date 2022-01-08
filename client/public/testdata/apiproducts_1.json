@@ -11,7 +11,7 @@
     {
       "name": "Orders API",
       "type": "GraphQL",
-      "imageUrl": "/order.svg",
+      "imageUrl": "/portal/order.svg",
       "specUrl": "https://test.apigee.hybrid.cloud10x.net/orders-graphql/query",
       "description": "Geolocation service for all location queries.",
       "access": "public",

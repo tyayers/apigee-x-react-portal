@@ -1,7 +1,7 @@
 import firebase from 'firebase/app'
 
 //const basePath = "http://localhost:8080/"; 
-const basePath = "";
+const basePath = "/portal/";
 
 export function getConfig() {
   return new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ export function getConfig() {
       resolve(data);
     }).catch(error => {
       console.error(error);
-      fetch('/testdata/config.json')
+      fetch(basePath + 'testdata/config.json')
       .then(response => response.json())
       .then(data => {
         resolve(data);
@@ -38,7 +38,7 @@ export function getApiProducts() {
       resolve(data);
     }).catch(error => {
       console.error(error);
-      fetch('/testdata/apiproducts_1.json')
+      fetch(basePath + 'testdata/apiproducts_1.json')
       .then(response => response.json())
       .then(data => {
         resolve(data);
@@ -64,7 +64,7 @@ export function getDeveloper(email) {
         resolve(data);
       }).catch(error => {
         console.error(error);
-        fetch('/testdata/developer.json')
+        fetch(basePath + 'testdata/developer.json')
         .then(response => response.json())
         .then(data => {
           resolve(data);
@@ -98,7 +98,7 @@ export function createDeveloper(email, firstName, lastName) {
       }).catch(error => {
         console.error(error);
         reject(error);
-        fetch('/testdata/developer.json')
+        fetch(basePath + 'testdata/developer.json')
         .then(response => response.json())
         .then(data => {
           resolve(data);
@@ -129,7 +129,7 @@ export function getApps(email) {
         resolve(data);
       }).catch(error => {
         console.error(error);
-        fetch('/testdata/apps.json')
+        fetch(basePath + 'testdata/apps.json')
         .then(response => response.json())
         .then(data => {
           resolve(data);
@@ -160,7 +160,7 @@ export function getApp(email, appName) {
         resolve(data);
       }).catch(error => {
         console.error(error);
-        fetch('/testdata/app.json')
+        fetch(basePath + 'testdata/app.json')
         .then(response => response.json())
         .then(data => {
           resolve(data);
@@ -188,7 +188,7 @@ export function createApp(email, appName, app) {
         resolve(data);
       }).catch(error => {
         console.error(error);
-        fetch('/testdata/app.json')
+        fetch(basePath + 'testdata/app.json')
         .then(response => response.json())
         .then(data => {
           resolve(data);
@@ -216,7 +216,7 @@ export function updateApp(email, appName, app) {
         resolve(data);
       }).catch(error => {
         console.error(error);
-        fetch('/testdata/app.json')
+        fetch(basePath + 'testdata/app.json')
         .then(response => response.json())
         .then(data => {
           resolve(data);
@@ -242,7 +242,7 @@ export function deleteApp(email, appName) {
         resolve(data);
       }).catch(error => {
         console.error(error);
-        fetch('/testdata/app.json')
+        fetch(basePath + 'testdata/app.json')
         .then(response => response.json())
         .then(data => {
           resolve(data);
@@ -270,7 +270,7 @@ export function updateAppCredential(email, appName, appCredential) {
         resolve(data);
       }).catch(error => {
         console.error(error);
-        fetch('/testdata/app.json')
+        fetch(basePath + 'testdata/app.json')
         .then(response => response.json())
         .then(data => {
           resolve(data);

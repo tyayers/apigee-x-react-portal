@@ -55,7 +55,6 @@ const Apis = ({
   });
 
   useEffect(() => {
-    console.log('Do something after state has changed');
     buildApiList();
   }, [apis, filterText, selectedProtocols, selectedCategories]);
 
@@ -115,9 +114,9 @@ const Apis = ({
 
   function getProductFormatted(api) {
     var path = "/apis/";
-    var type = api.type ? api.type.toLowerCase() : "rest";
+    var type = api.type ? api.type : "REST";
 
-    if (type == "graphql") path = "/gqlapis/";
+    if (type.toLowerCase() == "graphql") path = "/gqlapis/";
 
     if (api.specUrl) 
       return <Link to={path + api.name}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={type} description={api.description} image={api.imageUrl} /></Link>
@@ -129,8 +128,8 @@ const Apis = ({
     return Object.keys(categoryProductList).map((category) => 
       selectedCategories[category] &&
         <div>
-          <h3>{category} <span class="text-color-primary">APIs</span></h3>
-          <div class="container tiles-wrap" style={{textAlign: "center"}}>
+          <h3>{category} <span className="text-color-primary">APIs</span></h3>
+          <div className="container tiles-wrap" style={{textAlign: "center"}}>
             {categoryProductList[category]}
           </div>
         </div>
@@ -143,7 +142,7 @@ const Apis = ({
         <div className="container">
           <div className="testimonial-inner section-inner">
             <div className="testimonial-content  reveal-from-bottom">
-              <h1 class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">Cloud10X <span class="text-color-primary">APIs</span></h1>
+              <h1 className="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">Cloud10X <span className="text-color-primary">APIs</span></h1>
               <div className="container-xs">
                 <p className="m-0 mb-32 reveal-from-bottom" data-reveal-delay="400">
                   Embrace the API revolution with React web templates connected to Apigee X 🚀.
@@ -154,7 +153,7 @@ const Apis = ({
                 <SearchInput filterCallback={filterApis} protocols={selectedProtocols} categories={selectedCategories}></SearchInput>
               </div>
 
-              <div class="container tiles-wrap" style={{textAlign: "center"}}>
+              <div className="container tiles-wrap" style={{textAlign: "center"}}>
                 {productList}
               </div>
 

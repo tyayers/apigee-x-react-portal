@@ -1,35 +1,133 @@
-import React, {useState, useEffect} from 'react'
-import { CopyBlock, atomOneDark } from "react-code-blocks";
+import React, { useState, useEffect } from 'react';
 
-export function Webhooks({
+// import sections
+import Hero from '../components/sections/Hero';
+import FeaturesTiles from '../components/sections/FeaturesTiles';
+import FeaturesSplit from '../components/sections/FeaturesSplit';
+import Testimonial from '../components/sections/Testimonial';
+import Cta from '../components/sections/Cta';
+import { Link } from 'react-router-dom';
+import SearchInput from '../components/elements/SearchInput';
 
+import apiIcon from '../assets/images/api_icon.svg';
+
+import ApiProduct from '../components/elements/ApiProduct';
+
+export default function Webhooks({
+  webhooks,
+  hideEmptyApis
 }) {
 
-  const [subscribeCall, setSubscribeCall] = useState(`POST 'https://api-dev.apigee-x.theapishop.com/hooks'
-  --header "x-apikey: YOUR_API_KEY"
-  --data
-  {
-    "topic": "suppliers|customers|orders",
-    "pushConfig": {
-        "pushEndpoint": "YOUR_ENDPOINT"
-    }
-  }`);
+  const [productList, setProductList] = useState([]);
+  const [categoryProductList, setCategoryProductList] = useState({});
 
-  const webhooks = [
-    {
-      name: "Suppliers",
-      description: "This topic covers updates of all supplier data, including contact and goods information."
-    },
-    {
-      name: "Orders",
-      description: "Order data updates for all status and stage location changes effecting an order."
-    },
-    {
-      name: "Customers",
-      description: "Customer data updates are distributed through this event for both new and existing customer updates."
-    }
-  ];
+  const [filterText, setFilterText] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState({});
+  const [selectedProtocols, setSelectedProtocols] = useState({});
+
+  useEffect(() => {
+    if (productList.length == 0 && webhooks && webhooks.length > 0) {
+      for (var apiIndex in webhooks) {
+        let api = webhooks[apiIndex];
+        if (!api.type) api.type = "PUB/SUB";
+
+        if (!(api.type in Object.keys(selectedProtocols))) {
+          var newProtocols = selectedProtocols;
+          newProtocols[api.type] = true
+          setSelectedProtocols(newProtocols);
+        }
+
+        if (api.categories) {
+          for (var catIndex in api.categories) {
+            var catName = api.categories[catIndex];
   
+            if (! (catName in Object.keys(selectedCategories))) {
+              var newSelectedCategories = selectedCategories;
+              newSelectedCategories[catName] = true;
+              setSelectedCategories(newSelectedCategories);
+            }
+          }
+        }       
+      }
+    }
+  });
+
+  useEffect(() => {
+    buildApiList();
+  }, [webhooks, filterText, selectedProtocols, selectedCategories]);
+
+  const filterApis = function(filterText, selProtocols, selCategories) {
+    setFilterText(filterText);
+    setSelectedProtocols(selProtocols);
+    setSelectedCategories(selCategories);
+  }
+
+  function buildApiList() {
+    setProductList(webhooks.map((api) => {
+      if (checkApiToDisplay(api)
+        && (!api.categories || api.categories.length == 0)) {
+        return getProductFormatted(api);        
+      }
+    }));
+
+    var newCategoryProductList = {};
+    for (var apiIndex in webhooks) {
+      var api = webhooks[apiIndex];
+      if (checkApiToDisplay(api)
+        && (api.categories && api.categories.length > 0)) {
+
+        for (var catIndex in api.categories) {
+          var catName = api.categories[catIndex];
+
+          if (! (newCategoryProductList[catName])) 
+            newCategoryProductList[catName] = [ getProductFormatted(api) ];
+          else
+            newCategoryProductList[catName].push(getProductFormatted(api));
+        }
+      }
+    }
+
+    setCategoryProductList(newCategoryProductList);
+  }
+
+  function checkApiToDisplay(api) {
+    let result = false;
+    if (api.name.toLowerCase().includes(filterText.toLowerCase())
+      && (!api.type || Object.keys(selectedProtocols).length == 0 || selectedProtocols[api.type])) {
+        if (api.categories && api.categories.length > 0 && Object.keys(selectedCategories).length > 0) {
+          for (var cat in api.categories) {
+            if (selectedCategories[api.categories[cat]]) {
+              result = true;
+              break;
+            }
+          }
+        }
+        else
+          result = true;
+      }
+
+    return result;
+  }
+
+  function getProductFormatted(api) {
+    var path = "/webhooks/";
+    var type = api.type ? api.type : "Pub/Sub";
+
+    return <Link to={path + api.name.toLowerCase()}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={type} description={api.description} image={api.imageUrl} /></Link>
+  }
+
+  function getProductCategoriesList() {
+    return Object.keys(categoryProductList).map((category) => 
+      selectedCategories[category] &&
+        <div>
+          <h3>{category} <span class="text-color-primary">APIs</span></h3>
+          <div class="container tiles-wrap" style={{textAlign: "center"}}>
+            {categoryProductList[category]}
+          </div>
+        </div>
+    );
+  }
+
   return (
     <>
       <section className="testimonial section center-content illustration-section-01">
@@ -37,56 +135,26 @@ export function Webhooks({
           <div className="testimonial-inner section-inner">
             <div className="testimonial-content  reveal-from-bottom">
               <h1 class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">Cloud10X <span class="text-color-primary">Webhooks</span></h1>
-
-                <div className="container-xs">
-                  <p>
-                    Webhooks provide real-time integration to data events from our platform. You can easily subscribe and manage your subscriptions here in our portal.
-                  </p>
-                  
-                  <h3>Webhook topics</h3>
-                </div>
-                <div class="tiles-wrap">
-                  {webhooks.map((item) =>
-                    <div className="tiles-item" data-reveal-delay="200">
-                      <div className="tiles-item-inner">
-
-                        <div className="testimonial-item-footer text-xs mt-4 mb-16">
-                          <span className="testimonial-item-link" style={{fontSize: "27px"}}>
-                            {item.name}
-                          </span>
-                        </div>
-                        <div className="">
-                          <p className="text-sm mb-0" style={{height: "82px", overflow: "hidden", textOverflow: "ellipsis"}}>
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="container-xs">
-                  <h3>Create Webhook Subscription</h3>
-                  <div>
-                    To subscribe to a topic, simply POST a subscription messge to this endpoint using your API key:
-                    <br/><br/>
-                    <div style={{textAlign: "left"}}>
-                      <CopyBlock text={subscribeCall} language={"bash"} theme={atomOneDark} copyBlock />
-                    </div>
-                    <br/>
-                    You will receive back a confirmation of the subscription with a subscription Id:
-                    <br/><br/>
-                    <div style={{textAlign: "left"}}>
-                      <CopyBlock text={`{
-  "subscriptionId": "jSX86HMgW2O78TJ1"
-}`
-                      } language={"json"} theme={atomOneDark} copyBlock />
-                    </div>
-                  </div>                  
-                </div>
+              <div className="container-xs">
+                <p className="m-0 mb-32 reveal-from-bottom" data-reveal-delay="400">
+                  Subscribe to real-time data updates with Google Cloud Pub/Sub and Apigee X 🚀
+                </p>
               </div>
+              
+              <div className="container-xs">
+                <SearchInput filterCallback={filterApis} protocols={selectedProtocols} categories={selectedCategories}></SearchInput>
+              </div>
+
+              <div class="container tiles-wrap" style={{textAlign: "center"}}>
+                {productList}
+              </div>
+
+              {getProductCategoriesList()}
             </div>
+
           </div>
+          
+        </div>
       </section>
     </>
   );
