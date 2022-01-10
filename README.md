@@ -3,6 +3,9 @@
 This is a sample react template for an Apigee X developer portal using the
 Apigee API.
 
+## Build and deploy directly to Cloud Run
+[![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)
+
 ## Getting started with the client
 
 To try the react frontend template out, just clone and run the client with test
