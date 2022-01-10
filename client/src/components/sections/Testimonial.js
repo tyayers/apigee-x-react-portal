@@ -45,7 +45,7 @@ const Testimonial = ({
 
   const sectionHeader = {
     title: 'Customer testimonials',
-    paragraph: 'Vitae aliquet nec ullamcorper sit amet risus nullam eget felis semper quis lectus nulla at volutpat diam ut venenatis tellus—in ornare.'
+    paragraph: 'How did an API-First and API-Product approach transform your business?'
   };
 
   return (
@@ -62,14 +62,17 @@ const Testimonial = ({
               <div className="tiles-item-inner">
                 <div className="testimonial-item-content">
                   <p className="text-sm mb-0">
-                    — Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum cillum dolore eu fugiat.
+                    — Before our API-First initiative, it felt like our organization was trapped in mashed potatoes.  Every integration project,
+                    partner onboarding and new service launch felt like a slow-motion lemming march off a cliff.  An intense, targeted API approach
+                    changed everything - now we are prepared, and have the platform in place to quickly and efficiently launch any digital product
+                    as a new star in our online portfolio.
                       </p>
                 </div>
                 <div className="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider">
                   <span className="testimonial-item-name text-color-high">Roman Level</span>
                   <span className="text-color-low"> / </span>
                   <span className="testimonial-item-link">
-                    <a href="#0">AppName</a>
+                    <a href="#0">Finanical Services Customer</a>
                   </span>
                 </div>
               </div>
@@ -79,14 +82,18 @@ const Testimonial = ({
               <div className="tiles-item-inner">
                 <div className="testimonial-item-content">
                   <p className="text-sm mb-0">
-                    — Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum cillum dolore eu fugiat.
+                    — It used to be that every team released their own APIs, which was great for them, but sub-optimal for our
+                    customers, partners and in the end our company.  Now every team releases their internal APIs, and are 
+                    automatically tested, secured and published through our ONEAPI platform to public consumers, 
+                    with unified security, identity, onboarding, and branding.  Now we look like one team with a super professional digital
+                    platform approach, which is not only great for current business, but also helps with recruiting and our overall digital image.
                       </p>
                 </div>
                 <div className="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider">
                   <span className="testimonial-item-name text-color-high">Diana Rynzhuk</span>
                   <span className="text-color-low"> / </span>
                   <span className="testimonial-item-link">
-                    <a href="#0">AppName</a>
+                    <a href="#0">Retail Customer</a>
                   </span>
                 </div>
               </div>
@@ -96,14 +103,15 @@ const Testimonial = ({
               <div className="tiles-item-inner">
                 <div className="testimonial-item-content">
                   <p className="text-sm mb-0">
-                    — Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum cillum dolore eu fugiat.
+                    — DevOps for backends and code, and unified API-First for anything that gets touched between teams, or anyone outside of our organization.  
+                    That's our recipe for digital success.
                       </p>
                 </div>
                 <div className="testimonial-item-footer text-xs mt-32 mb-0 has-top-divider">
                   <span className="testimonial-item-name text-color-high">Ben Stafford</span>
                   <span className="text-color-low"> / </span>
                   <span className="testimonial-item-link">
-                    <a href="#0">AppName</a>
+                    <a href="#0">Manufacturing Customer</a>
                   </span>
                 </div>
               </div>

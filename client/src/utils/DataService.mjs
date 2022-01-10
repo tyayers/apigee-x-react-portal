@@ -1,7 +1,8 @@
 import firebase from 'firebase/app'
 
 //const basePath = "http://localhost:8080/"; 
-const basePath = "/portal/";
+//const basePath = "/portal/";
+const basePath = "";
 
 export function getConfig() {
   return new Promise((resolve, reject) => {

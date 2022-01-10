@@ -357,6 +357,7 @@ app.put('/apim/developers/:email/apps/:appName/keys/:keyName', (req, res) => {
 
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
+  // res.sendFile(path.join(__dirname + '/../public/' + req.url.replace('/portal/', '')));
   res.sendFile(path.join(__dirname + '/../public/index.html'));
 });
 

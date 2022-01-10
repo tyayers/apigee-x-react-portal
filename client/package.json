@@ -2,7 +2,7 @@
   "name": "open-react-template",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://test.apigee.hybrid.cloud10x.net/portal",
+  "homepage": "/",
   "dependencies": {
     "classnames": "^2.2.6",
     "firebase": "^8.10.0",
@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && rm -r -f '../service/public' && mkdir '../service/public' && cp -r 'build/.' '../service/public'",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
