@@ -11,7 +11,7 @@ RUN npm run build
 #COPY client/build ./public
 
 COPY client ./client
-RUN cd client && npm run build
+RUN cd client && npm install && npm run build
 RUN cp -R client/build ./public
 
 EXPOSE 8080
