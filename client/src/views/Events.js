@@ -13,8 +13,8 @@ import apiIcon from '../assets/images/api_icon.svg';
 
 import ApiProduct from '../components/elements/ApiProduct';
 
-export default function Webhooks({
-  webhooks,
+export default function Events({
+  events,
   hideEmptyApis
 }) {
 
@@ -26,9 +26,9 @@ export default function Webhooks({
   const [selectedProtocols, setSelectedProtocols] = useState({});
 
   useEffect(() => {
-    if (productList.length == 0 && webhooks && webhooks.length > 0) {
-      for (var apiIndex in webhooks) {
-        let api = webhooks[apiIndex];
+    if (productList.length == 0 && events && events.length > 0) {
+      for (var apiIndex in events) {
+        let api = events[apiIndex];
         if (!api.type) api.type = "PUB/SUB";
 
         if (!(api.type in Object.keys(selectedProtocols))) {
@@ -54,7 +54,7 @@ export default function Webhooks({
 
   useEffect(() => {
     buildApiList();
-  }, [webhooks, filterText, selectedProtocols, selectedCategories]);
+  }, [events, filterText, selectedProtocols, selectedCategories]);
 
   const filterApis = function(filterText, selProtocols, selCategories) {
     setFilterText(filterText);
@@ -63,7 +63,7 @@ export default function Webhooks({
   }
 
   function buildApiList() {
-    setProductList(webhooks.map((api) => {
+    setProductList(events.map((api) => {
       if (checkApiToDisplay(api)
         && (!api.categories || api.categories.length == 0)) {
         return getProductFormatted(api);        
@@ -71,8 +71,8 @@ export default function Webhooks({
     }));
 
     var newCategoryProductList = {};
-    for (var apiIndex in webhooks) {
-      var api = webhooks[apiIndex];
+    for (var apiIndex in events) {
+      var api = events[apiIndex];
       if (checkApiToDisplay(api)
         && (api.categories && api.categories.length > 0)) {
 
@@ -110,7 +110,7 @@ export default function Webhooks({
   }
 
   function getProductFormatted(api) {
-    var path = "/webhooks/";
+    var path = "/events/";
     var type = api.type ? api.type : "Pub/Sub";
 
     return <Link to={path + api.name.toLowerCase()}><ApiProduct className="features-tiles-item-image mb-16" data-reveal-delay="400" name={api.name} type={type} description={api.description} image={api.imageUrl} /></Link>
@@ -134,10 +134,10 @@ export default function Webhooks({
         <div className="container">
           <div className="testimonial-inner section-inner">
             <div className="testimonial-content  reveal-from-bottom">
-              <h1 class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">Cloud10X <span class="text-color-primary">Webhooks</span></h1>
+              <h1 class="mt-0 mb-16 reveal-from-bottom" data-reveal-delay="200">Cloud10X <span class="text-color-primary">Events</span></h1>
               <div className="container-xs">
                 <p className="m-0 mb-32 reveal-from-bottom" data-reveal-delay="400">
-                  Subscribe to real-time data updates with Google Cloud Pub/Sub and Apigee X 🚀
+                  Connect to real-time events powered by Google Cloud Pub/Sub and Apigee APIs 🚀
                 </p>
               </div>
               

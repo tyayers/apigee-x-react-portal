@@ -120,7 +120,7 @@ const Header = ({
                       <Link to="/apis" onClick={closeMenu}>APIs</Link>
                     </li>
                     <li>
-                      <Link to="/webhooks" onClick={closeMenu}>Webhooks</Link>
+                      <Link to="/events" onClick={closeMenu}>Events</Link>
                     </li>                    
                     <li>
                       <Link to="/pricing" onClick={closeMenu}>Pricing</Link>

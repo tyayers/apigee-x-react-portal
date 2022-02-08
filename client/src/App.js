@@ -19,8 +19,8 @@ import AppDetail from './views/AppDetail';
 import Apis from './views/Apis';
 import ApiDocView from './views/ApiDocView';
 import ApiDocGQLView from './views/ApiDocGQLView';
-import Webhooks from './views/Webhooks';
-import { WebhooksDetail } from './views/WebhooksDetail';
+import Events from './views/Events';
+import { EventDetails } from './views/EventDetails';
 import { Pricing } from './views/Pricing';
 import { Documentation } from './views/Documentation';
 import { YourSubscriptions } from './views/YourSubscriptions';
@@ -63,7 +63,7 @@ const App = () => {
   const [state, setState] = useState("startup");
   const [config, setConfig] = useState({});
   const [apiProducts, setApiProducts] = useState([]);
-  const [webhooks, setWebhooks] = useState([{
+  const [events, setEvents] = useState([{
     name: "Orders",
     description: "Subscribe to updates for order data streams"
   }, {
@@ -160,8 +160,8 @@ const App = () => {
             <AppRoute exact path="/apis" component={Apis} layout={LayoutDefault} hideEmptyApis={config.hideApisWithoutSpecs} user={user} apis={apiProducts} signOut={signOut} state={state}/>
             <AppRoute exact path="/apis/:api" component={ApiDocView} layout={LayoutDefault} apps={apps} user={user} apis={apiProducts} signOut={signOut} state={state}/>
             <AppRoute exact path="/gqlapis/:api" component={ApiDocGQLView} layout={LayoutDefault} apps={apps} user={user} apis={apiProducts} signOut={signOut} state={state}/>
-            <AppRoute exact path="/webhooks" component={Webhooks} layout={LayoutDefault} user={user} state={state} webhooks={webhooks}/>
-            <AppRoute exact path="/webhooks/:webhook" component={WebhooksDetail} layout={LayoutDefault} webhooks={webhooks} toast={showToast} />
+            <AppRoute exact path="/events" component={Events} layout={LayoutDefault} user={user} state={state} events={events}/>
+            <AppRoute exact path="/events/:event" component={EventDetails} layout={LayoutDefault} events={events} toast={showToast} />
             <AppRoute exact path="/pricing" component={Pricing} layout={LayoutDefault} user={user} state={state}/>
             <AppRoute exact path="/docs" component={Documentation} layout={LayoutDefault} user={user} state={state}/>
             <AppRoute exact path="/hooks" component={YourHooks} layout={LayoutDefault} user={user} state={state}/>
