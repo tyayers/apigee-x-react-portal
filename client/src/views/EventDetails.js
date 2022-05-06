@@ -17,8 +17,7 @@ export function EventDetails({
 
   const [eventName, seteventName] = useState(match.params.event == undefined ? "" : match.params.event.charAt(0).toUpperCase() + match.params.event.slice(1));
   const [event, setevent] = useState();
-  const [subscribeCall, setSubscribeCall] = useState(`curl -X POST 
-'https://test.apigee.hybrid.cloud10x.net/events/subscriptions'
+  const [subscribeCall, setSubscribeCall] = useState(`curl -X POST 'https://api.cloud10x.net/events'
 --header "x-api-key: YOUR_API_KEY"
 --data
 {
@@ -30,9 +29,9 @@ export function EventDetails({
   const [subscribeResponse, setSubscribeResponse] = useState(`{
   "subscriptionId": "gzAe0sgSVED6P2UO"
 }`);
-  const [deleteRequest, setDeleteRequest] = useState(`curl -X DELETE 
-'https://test.apigee.hybrid.cloud10x.net/events/subscriptions/YOUR_SUBSCRIPTION_ID'
- --header "x-api-key: YOUR_API_KEY"`);
+  const [deleteRequest, setDeleteRequest] = useState(`curl -X DELETE 'https://api.cloud10x.net/events/YOUR_ID'
+ --header "x-api-key: YOUR_API_KEY"
+ `);
 
   useEffect(() => {
     if (!event && events && events.length > 0) {
@@ -139,7 +138,7 @@ export function EventDetails({
                   <div style={{ textAlign: "left", position: "relative" }}>
                     <Highlight {...defaultProps} code={subscribeResponse} language="javascript" theme={CodePurple}>
                       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                        <pre className={className} style={{borderRadius: "54px", background: "#25282c"}} >
+                        <pre className={className} style={{ borderRadius: "54px", background: "#25282c" }} >
                           {tokens.map((line, i) => (
                             <div {...getLineProps({ line, key: i })}>
                               {line.map((token, key) => (
@@ -156,30 +155,30 @@ export function EventDetails({
                   </div>
                   <h3>Receive Events</h3>
                   <div>
-                  You will receive events pushed to your endpoint
+                    You will receive events pushed to your endpoint
                   </div>
                   <h3>Delete Subscription</h3>
                   <div>
-                  You can delete your subscription by like this:
-                  <br /><br />
-                  <div style={{ textAlign: "left", position: "relative" }}>
-                    <Highlight {...defaultProps} code={deleteRequest} language="js" theme={CodePurple}>
-                      {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                        <pre className={className} style={{borderRadius: "54px", background: "#25282c"}}>
-                          {tokens.map((line, i) => (
-                            <div {...getLineProps({ line, key: i })}>
-                              {line.map((token, key) => (
-                                <span {...getTokenProps({ token, key })} />
-                              ))}
-                            </div>
-                          ))}
-                        </pre>
-                      )}
-                    </Highlight>
-                    <button onClick={() => copyTextToClipboard(subscribeCall)} style={{ position: "absolute", right: "19px", bottom: "21px", width: "50px", height: "35px", marginTop: "0px" }} class="form-submit">
-                      <img src={copyIcon}></img>
-                    </button>
-                  </div>
+                    You can delete your subscription by like this:
+                    <br /><br />
+                    <div style={{ textAlign: "left", position: "relative" }}>
+                      <Highlight {...defaultProps} code={deleteRequest} language="js" theme={CodePurple}>
+                        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                          <pre className={className} style={{ borderRadius: "54px", background: "#25282c" }}>
+                            {tokens.map((line, i) => (
+                              <div {...getLineProps({ line, key: i })}>
+                                {line.map((token, key) => (
+                                  <span {...getTokenProps({ token, key })} />
+                                ))}
+                              </div>
+                            ))}
+                          </pre>
+                        )}
+                      </Highlight>
+                      <button onClick={() => copyTextToClipboard(subscribeCall)} style={{ position: "absolute", right: "19px", bottom: "21px", width: "50px", height: "35px", marginTop: "0px" }} class="form-submit">
+                        <img src={copyIcon}></img>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
